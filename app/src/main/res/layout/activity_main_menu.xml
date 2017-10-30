@@ -12,31 +12,50 @@
         android:layout_margin="10dp"
         android:layout_marginTop="20dp"
         android:orientation="vertical">
+
         <Button
+            android:id="@+id/buttonResume"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
+            android:backgroundTint="@android:color/holo_orange_light"
+            android:fontFamily="@font/baloo_chettan"
             android:text="Resume Game"
-            android:background="@color/colorAccent"
-            android:id="@+id/buttonResume"/>
+            android:textColor="@android:color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
         <Button
+            android:id="@+id/buttonNewGame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
+            android:backgroundTint="@color/colorAccent"
+            android:fontFamily="@font/baloo_chettan"
             android:text="New Game"
-            android:id="@+id/buttonNewGame"/>
+            android:textColor="@color/colorLightGray"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
         <Button
+            android:id="@+id/buttonSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
+            android:backgroundTint="@color/colorAccent"
+            android:fontFamily="@font/baloo_chettan"
             android:text="Settings"
-            android:id="@+id/buttonSettings"/>
+            android:textColor="@color/colorLightGray"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
         <Button
+            android:id="@+id/buttonCredits"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
+            android:backgroundTint="@android:color/holo_orange_light"
+            android:fontFamily="@font/baloo_chettan"
             android:text="Credits"
-            android:id="@+id/buttonCredits"/>
+            android:textColor="@color/colorLightGray"
+            android:textSize="24sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 
