@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_inventory"
+        android:title="Inventory"
+        
+        />
+    <item android:id="@+id/action_shop"
+        android:title="Shop" />
+    <item android:id="@+id/action_training"
+        android:title="Training" />
+    <!--<item android:id="@+id/action_navigation"-->
+        <!--android:title="@string/menu_navigation"-->
+        <!--android:icon="@drawable/ic_action_navigation_menu" />-->
+</menu>
