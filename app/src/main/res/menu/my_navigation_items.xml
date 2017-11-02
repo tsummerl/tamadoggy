@@ -2,13 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/action_inventory"
         android:title="Inventory"
-        
+        android:icon="@drawable/ic_iconitems"
         />
     <item android:id="@+id/action_shop"
-        android:title="Shop" />
-    <item android:id="@+id/action_training"
-        android:title="Training" />
-    <!--<item android:id="@+id/action_navigation"-->
-        <!--android:title="@string/menu_navigation"-->
-        <!--android:icon="@drawable/ic_action_navigation_menu" />-->
+        android:title="Shop"
+        android:icon="@drawable/ic_iconshop"/>
+    <item android:id="@+id/action_train"
+        android:title="Train"
+        android:icon="@drawable/ic_icontrain"/>
+    <item android:id="@+id/action_walk"
+        android:title="Walk"
+        android:icon="@drawable/ic_iconwalk"/>
 </menu>
