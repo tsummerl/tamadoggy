@@ -13,4 +13,12 @@
         <item name="android:fontFamily">@font/baloo_chettan</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="AppHeader">
+        <item name="android:textSize">36dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:fontFamily">@font/baloo_chettan</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
