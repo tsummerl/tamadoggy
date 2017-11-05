@@ -11,10 +11,6 @@ public final class Const {
     public static final String SHARED_NULL = "NULL_VALUE";
 
     public static final String SHARED_DATE_LAST_GAME_UPDATE = "LAST_GAME";
-    public static final String SHARED_DATE_HUNGER = "LAST_HUNGER";
-    public static final String SHARED_DATE_HYGIENE= "LAST_HYGIENE";
-    public static final String SHARED_DATE_FITNESS = "LAST_FITNESS";
-    public static final String SHARED_DATE_FUN = "LAST_FUN";
 
     public static final String SHARED_HUNGER = "HUNGER";
     public static final String SHARED_FUN = "FUN";
