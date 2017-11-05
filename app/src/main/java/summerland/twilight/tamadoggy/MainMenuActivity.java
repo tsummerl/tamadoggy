@@ -30,7 +30,7 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
         buttonCredits = findViewById(R.id.buttonCredits);
 
         sPref = getSharedPreferences(Const.SHARED_BASIC_GAME_DATA, Context.MODE_PRIVATE);
-        Date lastGame = new Date(sPref.getLong(Const.SHARED_DATE_LAST_GAME, 0));
+        Date lastGame = new Date(sPref.getLong(Const.SHARED_DATE_LAST_GAME_UPDATE, 0));
         if (lastGame.getTime() == 0L){
             buttonResume.setEnabled(false);
             buttonResume.setAlpha(0.5f);
@@ -48,15 +48,18 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
+        Intent i;
         switch (view.getId())
         {
             case R.id.buttonCredits:
                 break;
             case R.id.buttonNewGame:
-                Intent i = new Intent(this, NewGameActivity.class);
+                i = new Intent(this, NewGameActivity.class);
                 startActivity(i);
                 break;
             case R.id.buttonResume:
+                i = new Intent(this, MainGameActivity.class);
+                startActivity(i);
                 break;
             case R.id.buttonSettings:
                 break;

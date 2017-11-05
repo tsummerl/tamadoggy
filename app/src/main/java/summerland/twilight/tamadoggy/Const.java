@@ -9,7 +9,13 @@ public final class Const {
     /// Shared Preferences
     public static final String SHARED_BASIC_GAME_DATA = "BASIC_GAME_DATA";
     public static final String SHARED_NULL = "NULL_VALUE";
-    public static final String SHARED_DATE_LAST_GAME = "LAST_GAME";
+
+    public static final String SHARED_DATE_LAST_GAME_UPDATE = "LAST_GAME";
+    public static final String SHARED_DATE_HUNGER = "LAST_HUNGER";
+    public static final String SHARED_DATE_HYGIENE= "LAST_HYGIENE";
+    public static final String SHARED_DATE_FITNESS = "LAST_FITNESS";
+    public static final String SHARED_DATE_FUN = "LAST_FUN";
+
     public static final String SHARED_HUNGER = "HUNGER";
     public static final String SHARED_FUN = "FUN";
     public static final String SHARED_FITNESS = "FITNESS";

@@ -21,4 +21,9 @@
         <item name="android:fontFamily">@font/baloo_chettan</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="AppBasicBar" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:progressBackgroundTint">@color/colorLightGray</item>
+        <item name="android:progressTint">@color/colorPrimary</item>
+    </style>
 </resources>

@@ -40,7 +40,12 @@ public class NewGameActivity extends AppCompatActivity implements View.OnClickLi
         else{
             SharedPreferences.Editor sharedEdit = sPref.edit();
             Date currTime = new Date();
-            sharedEdit.putLong(Const.SHARED_DATE_LAST_GAME, currTime.getTime());
+            sharedEdit.putLong(Const.SHARED_DATE_LAST_GAME_UPDATE, currTime.getTime());
+//            sharedEdit.putLong(Const.SHARED_DATE_HUNGER, currTime.getTime());
+//            sharedEdit.putLong(Const.SHARED_DATE_HYGIENE, currTime.getTime());
+//            sharedEdit.putLong(Const.SHARED_DATE_FITNESS, currTime.getTime());
+//            sharedEdit.putLong(Const.SHARED_DATE_FUN, currTime.getTime());
+
             sharedEdit.putInt(Const.SHARED_FITNESS, 100);
             sharedEdit.putInt(Const.SHARED_FUN, 100);
             sharedEdit.putInt(Const.SHARED_HYGIENE, 100);
