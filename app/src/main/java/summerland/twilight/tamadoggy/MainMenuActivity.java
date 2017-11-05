@@ -1,6 +1,7 @@
 package summerland.twilight.tamadoggy;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -47,6 +48,18 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-
+        switch (view.getId())
+        {
+            case R.id.buttonCredits:
+                break;
+            case R.id.buttonNewGame:
+                Intent i = new Intent(this, NewGameActivity.class);
+                startActivity(i);
+                break;
+            case R.id.buttonResume:
+                break;
+            case R.id.buttonSettings:
+                break;
+        }
     }
 }
