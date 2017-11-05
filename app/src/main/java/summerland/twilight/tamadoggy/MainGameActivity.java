@@ -16,7 +16,7 @@ public class MainGameActivity extends AppCompatActivity {
 
     Date lastDate;
     ProgressBar progHunger, progFitness, progHygiene, progFun;
-    Handler handleHygiene, handleFitness, handleFun, handleHunger;
+    Handler handleStat;
     int valHunger, valFitness, valHygiene, valFun, nextUpdate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +28,6 @@ public class MainGameActivity extends AppCompatActivity {
         progHunger = findViewById(R.id.barHunger);
         progHygiene = findViewById(R.id.barHygiene);
         progFun = findViewById(R.id.barFun);
-
-        handleFitness = new Handler();
-        handleFun = new Handler();
-        handleHunger = new Handler();
-        handleHygiene = new Handler();
     }
 
     @Override
@@ -46,6 +41,8 @@ public class MainGameActivity extends AppCompatActivity {
         nextUpdate = calculateStatValue();
 
         setProgress();
+        handleStat = new Handler();
+        handleStat.postDelayed(runnable, TimeUnit.MINUTES.toMillis(nextUpdate));
     }
     @Override
     protected void onPause(){
@@ -64,12 +61,12 @@ public class MainGameActivity extends AppCompatActivity {
         long timeDiff = currDate.getTime() - lastDate.getTime();
         int intTimeDiff = (int) TimeUnit.MILLISECONDS.toMinutes(timeDiff);
         if (intTimeDiff >= 60) {
-            valHunger = valHunger - (2 * ((int)timeDiff % 60));
-            valFun = valFun - (3 * ((int)timeDiff % 60));
-            valFitness = valFitness - (2 * ((int)timeDiff % 60));
-            valHygiene = valHygiene - (1 * ((int)timeDiff % 60));
+            valHunger = valHunger - (2 * (intTimeDiff / 60));
+            valFun = valFun - (3 * (intTimeDiff / 60));
+            valFitness = valFitness - (2 * (intTimeDiff / 60));
+            valHygiene = valHygiene - (1 * (intTimeDiff / 60));
 
-            lastDate = new Date(lastDate.getTime() + (int) timeDiff % 60);
+            lastDate = new Date(lastDate.getTime() + TimeUnit.HOURS.toMillis(intTimeDiff / 60));
         }
         return 60 - intTimeDiff; //remaining time until next update;
     }
@@ -80,4 +77,17 @@ public class MainGameActivity extends AppCompatActivity {
         progHygiene.setProgress(valHygiene);
         progHunger.setProgress(valHunger);
     }
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            valHunger = valHunger -2;
+            valFun = valFun - 3;
+            valFitness = valFitness -2;
+            valHygiene = valHygiene -1;
+
+            setProgress();
+            lastDate = new Date();
+            handleStat.postDelayed(this, TimeUnit.HOURS.toMillis(1));
+        }
+    };
 }
