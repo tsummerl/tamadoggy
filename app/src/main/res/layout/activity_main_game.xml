@@ -127,6 +127,12 @@
                         android:layout_margin="5sp"
                         android:layout_weight="2"
                         />
+                    <TextView
+                        android:id="@+id/textHunger"
+                        android:layout_weight="0"
+                        android:fontFamily="@font/baloo_chettan"
+                        android:gravity="right"
+                        android:text="100" />
                 </TableRow>
 
                 <TableRow
@@ -150,6 +156,12 @@
                         android:progress="50"
                         style="@style/AppBasicBar"
                          />
+                    <TextView
+                        android:id="@+id/textFun"
+                        android:layout_weight="0"
+                        android:fontFamily="@font/baloo_chettan"
+                        android:gravity="right"
+                        android:text="100" />
                 </TableRow>
 
                 <TableRow
@@ -172,6 +184,13 @@
                         android:layout_margin="5sp"
                         android:layout_weight="2"
                          />
+
+                    <TextView
+                        android:id="@+id/textFitness"
+                        android:layout_weight="0"
+                        android:fontFamily="@font/baloo_chettan"
+                        android:gravity="right"
+                        android:text="100" />
                 </TableRow>
 
                 <TableRow
@@ -194,6 +213,12 @@
                         android:layout_margin="5sp"
                         android:layout_weight="2"
                          />
+                    <TextView
+                        android:id="@+id/textHygiene"
+                        android:layout_weight="0"
+                        android:fontFamily="@font/baloo_chettan"
+                        android:gravity="right"
+                        android:text="100" />
                 </TableRow>
 
                 <!--<TableRow-->

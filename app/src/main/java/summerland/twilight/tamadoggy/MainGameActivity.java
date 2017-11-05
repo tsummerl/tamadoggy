@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +17,7 @@ public class MainGameActivity extends AppCompatActivity {
 
     Date lastDate;
     ProgressBar progHunger, progFitness, progHygiene, progFun;
+    TextView textHunger, textFitness, textHygiene, textFun;
     Handler handleStat;
     int valHunger, valFitness, valHygiene, valFun, nextUpdate;
     @Override
@@ -28,6 +30,10 @@ public class MainGameActivity extends AppCompatActivity {
         progHunger = findViewById(R.id.barHunger);
         progHygiene = findViewById(R.id.barHygiene);
         progFun = findViewById(R.id.barFun);
+        textFitness = findViewById(R.id.textFitness);
+        textFun = findViewById(R.id.textFun);
+        textHunger = findViewById(R.id.textHunger);
+        textHygiene = findViewById(R.id.textHygiene);
     }
 
     @Override
@@ -76,6 +82,11 @@ public class MainGameActivity extends AppCompatActivity {
         progFun.setProgress(valFun);
         progHygiene.setProgress(valHygiene);
         progHunger.setProgress(valHunger);
+
+        textHygiene.setText("" + valHygiene);
+        textFun.setText("" + valFun);
+        textHunger.setText("" + valHunger);
+        textFitness.setText("" + valFitness);
     }
     private Runnable runnable = new Runnable() {
         @Override
