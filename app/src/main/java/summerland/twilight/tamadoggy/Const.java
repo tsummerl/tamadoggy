@@ -23,14 +23,16 @@ public final class Const {
     public static final String DOG_TABLE_NAME = "DOGINFOTABLE";
     public static final String ITEM_TABLE_NAME = "ITEMINFOTABLE";
     public static final String CURRENT_ITEMS_TABLE_NAME = "CURRENTITEMSTABLE";
+    public static final String CURRENT_ITEMS_ID = "ITEMID";
 
     public static final String UID = "_id";
     public static final String ITEM_NAME = "Name";
-    public static final String ITEM_TYPE = "Type";
+    public static final String ITEM_DESCRIPTION = "Type";
     public static final String ITEM_HUNGER = "Hunger";
     public static final String ITEM_FUN = "Fun";
     public static final String ITEM_FITNESS = "Fitness";
     public static final String ITEM_HYGIENE = "Hygiene";
+    public static final String ITEM_COST = "Cost";
 
     public static final String CURRENT_ITEMS_AMOUNT = "Amount";
 
