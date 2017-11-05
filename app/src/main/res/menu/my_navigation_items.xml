@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_home"
+        android:title="Home"
+        android:icon="@drawable/ic_iconhome"
+        />
     <item android:id="@+id/action_inventory"
         android:title="Inventory"
         android:icon="@drawable/ic_iconitems"

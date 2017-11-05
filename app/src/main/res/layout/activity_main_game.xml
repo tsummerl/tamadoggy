@@ -207,30 +207,30 @@
                         android:indeterminateTintMode="src_atop" />
                 </TableRow>
 
-                <TableRow
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:gravity="center_vertical">
+                <!--<TableRow-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="2"-->
+                    <!--android:gravity="center_vertical">-->
 
-                    <TextView
-                        android:layout_weight="0"
-                        android:fontFamily="@font/baloo_chettan"
-                        android:gravity="left"
-                        android:text="Energy" />
+                    <!--<TextView-->
+                        <!--android:layout_weight="0"-->
+                        <!--android:fontFamily="@font/baloo_chettan"-->
+                        <!--android:gravity="left"-->
+                        <!--android:text="Energy" />-->
 
-                    <ProgressBar
-                        android:id="@+id/barEnergy"
-                        style="@android:style/Widget.ProgressBar.Horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5sp"
-                        android:layout_weight="2"
-                        android:color="@android:color/white"
-                        android:indeterminate="true"
-                        android:indeterminateTint="@color/colorPrimary"
-                        android:indeterminateTintMode="src_atop" />
-                </TableRow>
+                    <!--<ProgressBar-->
+                        <!--android:id="@+id/barEnergy"-->
+                        <!--style="@android:style/Widget.ProgressBar.Horizontal"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_margin="5sp"-->
+                        <!--android:layout_weight="2"-->
+                        <!--android:color="@android:color/white"-->
+                        <!--android:indeterminate="true"-->
+                        <!--android:indeterminateTint="@color/colorPrimary"-->
+                        <!--android:indeterminateTintMode="src_atop" />-->
+                <!--</TableRow>-->
             </TableLayout>
         </LinearLayout>
     </LinearLayout>
@@ -249,8 +249,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             app:itemBackground="@android:color/transparent"
-            app:itemIconTint="@color/colorPrimary"
-            app:itemTextColor="@color/colorPrimary"
+            app:itemIconTint="@drawable/nav_selector"
+            app:itemTextColor="@drawable/nav_selector"
             app:menu="@menu/my_navigation_items"/>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

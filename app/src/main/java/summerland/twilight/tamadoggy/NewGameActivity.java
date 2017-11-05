@@ -45,8 +45,10 @@ public class NewGameActivity extends AppCompatActivity implements View.OnClickLi
             sharedEdit.putInt(Const.SHARED_FUN, 100);
             sharedEdit.putInt(Const.SHARED_HYGIENE, 100);
             sharedEdit.putInt(Const.SHARED_HUNGER, 100);
-
+            sharedEdit.putString(Const.SHARED_DOGNAME, dogName);
+            sharedEdit.commit();
             Intent i = new Intent(this, MainGameActivity.class);
+            finish();
             startActivity(i);
         }
     }

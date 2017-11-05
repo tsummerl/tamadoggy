@@ -14,6 +14,7 @@ public final class Const {
     public static final String SHARED_FUN = "FUN";
     public static final String SHARED_FITNESS = "FITNESS";
     public static final String SHARED_HYGIENE = "HYGIENE";
+    public static final String SHARED_DOGNAME = "DOGNAME";
     /// SQLite Database
 
     public static final String DATABASE_NAME = "dogDatabase";
@@ -35,6 +36,13 @@ public final class Const {
     public static final String DOG_PICTURE_PREFIX = "Picture_Prefix";
 
     public static final int DATABASE_VERSION = 1;
+
+    public enum Stat {
+        HUNGER,
+        FUN,
+        FITNESS,
+        HYGIENE
+    }
     private Const(){
         throw new AssertionError();
     }
