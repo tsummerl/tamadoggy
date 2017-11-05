@@ -74,7 +74,7 @@ public class MainGameActivity extends AppCompatActivity {
 
             lastDate = new Date(lastDate.getTime() + TimeUnit.HOURS.toMillis(intTimeDiff / 60));
         }
-        return 60 - intTimeDiff; //remaining time until next update;
+        return 59 - (intTimeDiff % 60); //remaining time until next update;
     }
     private void setProgress()
     {
