@@ -4,6 +4,15 @@ import android.content.Context;
 import android.database.ContentObservable;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * Created by Jake on 11/5/2017.
@@ -46,5 +55,25 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
+    }
+
+    private void insertJSONData(SQLiteDatabase db){
+        try {
+            InputStream in = context.openFileInput("items.json");
+            InputStreamReader inputStreamReader = new InputStreamReader(in);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
+            }
+        } catch (FileNotFoundException e) {
+            Log.e("SQLITEHELPER", "file not found exception");
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            Log.e("SQLITEHELPER", "IO error");
+            e.printStackTrace();
+        }
     }
 }

@@ -1,0 +1,62 @@
+//"CREATE TABLE " +
+//Const.ITEM_TABLE_NAME + " (" +
+//Const.UID + " INTEGER PRIMARY KEY AUTOINCREMENET, " +
+//Const.ITEM_NAME + "TEXT, " +
+//Const.ITEM_HUNGER + "INTEGER, " +
+//Const.ITEM_FITNESS + "INTEGER, " +
+//Const.ITEM_FUN + "INTEGER, " +
+//Const.ITEM_COST + "INTEGER, " +
+//Const.ITEM_HYGIENE + "INTEGER);";
+
+{
+  "items": [
+    {
+      "Name": "Kibble Chicken Dog Food",
+      "Hunger": 30,
+      "Fun": 0,
+      "Fitness": 0,
+      "Hygiene": 0,
+      "Cost": 20
+    },
+    {
+      "Name": "Kibble Beef Dog Food",
+      "Hunger": 35,
+      "Fun": 0,
+      "Fitness": 0,
+      "Hygiene": 0,
+      "Cost": 25
+    },
+    {
+      "Name": "Pretty Puppy Dog Shampoo",
+      "Hunger": 0,
+      "Fun": 0,
+      "Fitness": 0,
+      "Hygiene": 40,
+      "Cost": 20
+    },
+    {
+      "Name": "Pretty Puppy Dog Shampoo",
+      "Hunger": 0,
+      "Fun": 0,
+      "Fitness": 0,
+      "Hygiene": 40,
+      "Cost": 20
+    },
+    {
+      "Name": "Chew Ball",
+      "Hunger": 0,
+      "Fun": 20,
+      "Fitness": 0,
+      "Hygiene": 0,
+      "Cost": 5
+    },
+    {
+      "Name": "Yum Beef Dog Treat",
+      "Hunger": 10,
+      "Fun": 10,
+      "Fitness": 0,
+      "Hygiene": 0,
+      "Cost": 20
+    }
+  ]
+}
