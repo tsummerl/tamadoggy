@@ -52,6 +52,8 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
         switch (view.getId())
         {
             case R.id.buttonCredits:
+                i = new Intent(this, CreditsActivity.class);
+                startActivity(i);
                 break;
             case R.id.buttonNewGame:
                 i = new Intent(this, NewGameActivity.class);
