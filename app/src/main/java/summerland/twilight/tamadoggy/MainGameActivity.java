@@ -19,7 +19,9 @@ import android.widget.TextView;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class MainGameActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener {
+public class MainGameActivity extends AppCompatActivity implements
+        MainFragment.OnFragmentInteractionListener,
+        WalkFragment.OnFragmentInteractionListener{
 
     SharedPreferences sPref;
     Database db;
@@ -28,6 +30,9 @@ public class MainGameActivity extends AppCompatActivity implements MainFragment.
     Date lastDate;
 
     Fragment fragmentMain;
+    Fragment fragmentWalk;
+    Fragment fragmentShop;
+    Fragment fragmentInventory;
     Handler handleStat;
     private Runnable runnable = new Runnable() {
         @Override
@@ -52,7 +57,14 @@ public class MainGameActivity extends AppCompatActivity implements MainFragment.
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation_game);
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentMain = fragmentManager.findFragmentById(R.id.title_fragment);
+        fragmentMain = new MainFragment();
+        fragmentWalk = new WalkFragment();
+
+        FragmentTransaction fragmentTransactionHome = fragmentManager.beginTransaction();
+        fragmentTransactionHome.replace(R.id.fragmentHolder, fragmentMain);
+        fragmentTransactionHome.addToBackStack(null);
+        fragmentTransactionHome.commit();
+
         bottomNav.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -60,8 +72,9 @@ public class MainGameActivity extends AppCompatActivity implements MainFragment.
                         switch(item.getItemId())
                         {
                             case R.id.action_home:
-                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                fragmentTransaction.replace(R.id.title_fragment, fragmentMain);
+                                FragmentTransaction fragmentTransactionHome = fragmentManager.beginTransaction();
+                                fragmentTransactionHome.replace(R.id.fragmentHolder, fragmentMain);
+                                fragmentTransactionHome.commit();
                                 break;
                             case R.id.action_inventory:
                                 break;
@@ -70,6 +83,9 @@ public class MainGameActivity extends AppCompatActivity implements MainFragment.
                             case R.id.action_train:
                                 break;
                             case R.id.action_walk:
+                                FragmentTransaction fragmentTransactionWalk = fragmentManager.beginTransaction();
+                                fragmentTransactionWalk.replace(R.id.fragmentHolder, fragmentWalk);
+                                fragmentTransactionWalk.commit();
                                 break;
                         }
                         return true;
