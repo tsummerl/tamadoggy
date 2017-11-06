@@ -258,7 +258,7 @@
         <!-- Content Container -->
 
         <android.support.design.widget.BottomNavigationView
-            android:id="@+id/bottom_navigation"
+            android:id="@+id/bottom_navigation_game"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

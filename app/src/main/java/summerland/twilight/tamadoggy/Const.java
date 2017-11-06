@@ -39,13 +39,19 @@ public final class Const {
     public static final String DOG_TYPE = "Type";
     public static final String DOG_PICTURE_PREFIX = "Picture_Prefix";
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
 
     public enum Stat {
         HUNGER,
         FUN,
         FITNESS,
         HYGIENE
+    }
+
+    public enum databaseView {
+        CURRENT_ITEMS,
+        SHOP_ITEMS,
+        ALL_ITEMS
     }
     private Const(){
         throw new AssertionError();

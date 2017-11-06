@@ -2,9 +2,13 @@ package summerland.twilight.tamadoggy;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -20,6 +24,23 @@ public class MainGameActivity extends AppCompatActivity {
     TextView textHunger, textFitness, textHygiene, textFun;
     Handler handleStat;
     int valHunger, valFitness, valHygiene, valFun, nextUpdate;
+
+
+    Database db;
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            valHunger = valHunger -2;
+            valFun = valFun - 3;
+            valFitness = valFitness -2;
+            valHygiene = valHygiene -1;
+
+            setProgress();
+            lastDate = new Date();
+//            handleStat.postDelayed(this, TimeUnit.MINUTES.toMillis(1));
+            handleStat.postDelayed(this, TimeUnit.HOURS.toMillis(1));
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +55,36 @@ public class MainGameActivity extends AppCompatActivity {
         textFun = findViewById(R.id.textFun);
         textHunger = findViewById(R.id.textHunger);
         textHygiene = findViewById(R.id.textHygiene);
+
+        BottomNavigationView bottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation_game);
+        bottomNav.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch(item.getItemId())
+                        {
+                            case R.id.action_home:
+                                break;
+                            case R.id.action_inventory:
+                                break;
+                            case R.id.action_shop:
+                                break;
+                            case R.id.action_train:
+                                break;
+                            case R.id.action_walk:
+                                break;
+                        }
+                        return true;
+                    }
+        });
+        db = new Database(this);
+        Cursor cursor = db.getData(Const.databaseView.ALL_ITEMS);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast())
+        {
+            String name = cursor.getString(cursor.getColumnIndex(Const.ITEM_NAME));
+            cursor.moveToNext();
+        }
     }
 
     @Override
@@ -48,6 +99,7 @@ public class MainGameActivity extends AppCompatActivity {
 
         setProgress();
         handleStat = new Handler();
+        //handleStat.postDelayed(runnable, TimeUnit.MINUTES.toMillis(1));
         handleStat.postDelayed(runnable, TimeUnit.MINUTES.toMillis(nextUpdate));
     }
     @Override
@@ -88,17 +140,5 @@ public class MainGameActivity extends AppCompatActivity {
         textHunger.setText("" + valHunger);
         textFitness.setText("" + valFitness);
     }
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            valHunger = valHunger -2;
-            valFun = valFun - 3;
-            valFitness = valFitness -2;
-            valHygiene = valHygiene -1;
 
-            setProgress();
-            lastDate = new Date();
-            handleStat.postDelayed(this, TimeUnit.HOURS.toMillis(1));
-        }
-    };
 }

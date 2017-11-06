@@ -1,13 +1,3 @@
-//"CREATE TABLE " +
-//Const.ITEM_TABLE_NAME + " (" +
-//Const.UID + " INTEGER PRIMARY KEY AUTOINCREMENET, " +
-//Const.ITEM_NAME + "TEXT, " +
-//Const.ITEM_HUNGER + "INTEGER, " +
-//Const.ITEM_FITNESS + "INTEGER, " +
-//Const.ITEM_FUN + "INTEGER, " +
-//Const.ITEM_COST + "INTEGER, " +
-//Const.ITEM_HYGIENE + "INTEGER);";
-
 {
   "items": [
     {
