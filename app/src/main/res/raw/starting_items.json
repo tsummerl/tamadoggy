@@ -1,0 +1,24 @@
+{
+  "items":[
+    {
+      "ItemID": 1,
+      "Amount": 5
+    },
+    {
+      "ItemID": 2,
+      "Amount": 5
+    },
+    {
+      "ItemID": 3,
+      "Amount": 3
+    },
+    {
+      "ItemID": 5,
+      "Amount": 1
+    },
+    {
+      "ItemID": 6,
+      "Amount": 3
+    }
+  ]
+}

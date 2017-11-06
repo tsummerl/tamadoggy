@@ -2,7 +2,6 @@ package summerland.twilight.tamadoggy;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.ContentObservable;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -55,7 +54,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(CREATE_ITEM_INFO_TABLE);
         sqLiteDatabase.execSQL(CREATE_CURRENT_ITEMS_TABLE);
-        insertJSONData(sqLiteDatabase);
+        insertJSONItemsData(sqLiteDatabase);
+        insertJSONStartingData(sqLiteDatabase);
     }
 
     @Override
@@ -63,16 +63,17 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         try {
             sqLiteDatabase.execSQL(DROP_TABLE_ITEMS);
             onCreate(sqLiteDatabase);
-            insertJSONData(sqLiteDatabase);
+            insertJSONItemsData(sqLiteDatabase);
             Toast.makeText(context, "onUpgrade called", Toast.LENGTH_LONG).show();
         } catch (SQLException e) {
             Toast.makeText(context, "exception onUpgrade() db", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void insertJSONData(SQLiteDatabase db){
+    private JSONArray getJSONArray(int fileID){
+        JSONArray jsonArray = null;
         try {
-            InputStream in = context.getResources().openRawResource(R.raw.items);
+            InputStream in = context.getResources().openRawResource(fileID);
             InputStreamReader inputStreamReader = new InputStreamReader(in);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             StringBuilder sb = new StringBuilder();
@@ -81,7 +82,22 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 sb.append(line);
             }
             JSONObject obj = new JSONObject(sb.toString());
-            JSONArray jsonArray = obj.getJSONArray("items");
+            jsonArray = obj.getJSONArray("items");
+        } catch (FileNotFoundException e) {
+            Log.e("SQLITEHELPER", "file not found exception");
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            Log.e("SQLITEHELPER", "IO error");
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonArray;
+    }
+    private void insertJSONItemsData(SQLiteDatabase db){
+        try {
+            JSONArray jsonArray = getJSONArray(R.raw.items);
             ContentValues contentValues;
             for (int i=0; i<jsonArray.length(); i++){
                 JSONObject jb = (JSONObject) jsonArray.get(i);
@@ -95,13 +111,22 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 long id = db.insert(Const.ITEM_TABLE_NAME, null, contentValues);
                 Log.d("SQLITEHELPER", "insert data id" + id);
             }
-        } catch (FileNotFoundException e) {
-            Log.e("SQLITEHELPER", "file not found exception");
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        catch (IOException e) {
-            Log.e("SQLITEHELPER", "IO error");
-            e.printStackTrace();
+    }
+    private void insertJSONStartingData(SQLiteDatabase db){
+        try {
+            JSONArray jsonArray = getJSONArray(R.raw.items);
+            ContentValues contentValues;
+            for (int i=0; i<jsonArray.length(); i++){
+                JSONObject jb = (JSONObject) jsonArray.get(i);
+                contentValues = new ContentValues();
+                contentValues.put(Const.CURRENT_ITEMS_ID, jb.getString(Const.CURRENT_ITEMS_ID));
+                contentValues.put(Const.CURRENT_ITEMS_AMOUNT, jb.getString(Const.CURRENT_ITEMS_AMOUNT));
+                long id = db.insert(Const.ITEM_TABLE_NAME, null, contentValues);
+                Log.d("SQLITEHELPER", "insert data id" + id);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -19,18 +19,18 @@
     {
       "Name": "Pretty Puppy Dog Shampoo",
       "Hunger": 0,
-      "Fun": 0,
+      "Fun": -10,
       "Fitness": 0,
       "Hygiene": 40,
       "Cost": 20
     },
     {
-      "Name": "Pretty Puppy Dog Shampoo",
+      "Name": "Awesome Puppy Dog Shampoo",
       "Hunger": 0,
       "Fun": 0,
       "Fitness": 0,
-      "Hygiene": 40,
-      "Cost": 20
+      "Hygiene": 50,
+      "Cost": 50
     },
     {
       "Name": "Chew Ball",
