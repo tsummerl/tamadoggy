@@ -54,6 +54,15 @@ public final class Const {
         SHOP_ITEMS,
         ALL_ITEMS
     }
+
+    public static final class CurrentItems{
+        public CurrentItems() {
+            ;
+        }
+        int id;
+        String itemName;
+        int hunger, fun, fitness, hygiene, amount;
+    }
     private Const(){
         throw new AssertionError();
     }

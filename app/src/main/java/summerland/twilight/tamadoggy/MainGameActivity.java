@@ -11,6 +11,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -21,7 +23,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.Date;
@@ -30,7 +31,8 @@ import java.util.concurrent.TimeUnit;
 
 public class MainGameActivity extends AppCompatActivity implements
         MainFragment.OnFragmentInteractionListener,
-        WalkFragment.OnFragmentInteractionListener{
+        WalkFragment.OnFragmentInteractionListener,
+        ItemsFragment.OnFragmentInteractionListener{
 
     SharedPreferences sPref;
     Database db;
@@ -83,6 +85,7 @@ public class MainGameActivity extends AppCompatActivity implements
         final FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentMain = new MainFragment();
         fragmentWalk = new WalkFragment();
+        fragmentInventory = new ItemsFragment();
         FragmentTransaction fragmentTransactionHome = fragmentManager.beginTransaction();
         fragmentTransactionHome.replace(R.id.fragmentHolder, fragmentMain);
         fragmentTransactionHome.addToBackStack(null);
@@ -100,6 +103,9 @@ public class MainGameActivity extends AppCompatActivity implements
                                 fragmentTransactionHome.commit();
                                 break;
                             case R.id.action_inventory:
+                                FragmentTransaction fragmentTransactionInvent = fragmentManager.beginTransaction();
+                                fragmentTransactionInvent.replace(R.id.fragmentHolder, fragmentInventory);
+                                fragmentTransactionInvent.commit();
                                 break;
                             case R.id.action_shop:
                                 break;
@@ -130,7 +136,23 @@ public class MainGameActivity extends AppCompatActivity implements
         while (!cursor.isAfterLast())
         {
             String name = cursor.getString(cursor.getColumnIndex(Const.ITEM_NAME));
+            int itemId, itemFun, itemFitness, itemHygiene, itemAmount, itemHunger;
+            itemId = cursor.getInt(cursor.getColumnIndex(Const.CURRENT_ITEMS_ID));
+            itemAmount = cursor.getInt(cursor.getColumnIndex(Const.CURRENT_ITEMS_AMOUNT));
+            itemFun = cursor.getInt(cursor.getColumnIndex(Const.ITEM_FUN));
+            itemFitness = cursor.getInt(cursor.getColumnIndex(Const.ITEM_FITNESS));
+            itemHunger = cursor.getInt(cursor.getColumnIndex(Const.ITEM_HUNGER));
+            itemHygiene = cursor.getInt(cursor.getColumnIndex(Const.ITEM_HYGIENE));
             cursor.moveToNext();
+            Const.CurrentItems curItem = new Const.CurrentItems();
+            curItem.hunger = itemHunger;
+            curItem.fun = itemFun;
+            curItem.fitness = itemFitness;
+            curItem.hygiene = itemHygiene;
+            curItem.amount = itemAmount;
+            curItem.id = itemId;
+            curItem.itemName = name;
+            ((ItemsFragment) fragmentInventory).addItemToView(curItem);
         }
     }
 
@@ -204,8 +226,9 @@ public class MainGameActivity extends AppCompatActivity implements
         }
         return 59 - (intTimeDiff % 60); //remaining time until next update;
     }
-
-
+    public void useItem(){
+        ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(150);
+    }
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)

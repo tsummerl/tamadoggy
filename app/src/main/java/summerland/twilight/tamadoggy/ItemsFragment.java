@@ -4,9 +4,17 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.ButtonBarLayout;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 
 /**
@@ -28,7 +36,9 @@ public class ItemsFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
+    private View v;
+    private LinearLayout layout;
+    private HashMap<Integer, Const.CurrentItems> currentItems;
     public ItemsFragment() {
         // Required empty public constructor
     }
@@ -64,7 +74,26 @@ public class ItemsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_items, container, false);
+        View v = inflater.inflate(R.layout.fragment_items, container, false);
+        layout = v.findViewById(R.id.linearHolder);
+
+        if(currentItems != null)
+        {
+            Iterator it = currentItems.entrySet().iterator();
+            while (it.hasNext()){
+                Map.Entry me = (Map.Entry)it.next();
+                Button button = new Button(getActivity(), null, R.style.AppButtonStyle);
+                button.setText(((Const.CurrentItems)me.getValue()).itemName);
+                layout.addView(button);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((MainGameActivity)getActivity()).useItem();
+                    }
+                });
+            }
+        }
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -91,6 +120,21 @@ public class ItemsFragment extends Fragment {
         mListener = null;
     }
 
+    public void addItemToView(Const.CurrentItems c){
+        if(currentItems == null){
+            currentItems = new HashMap<Integer, Const.CurrentItems>();
+        }
+        Const.CurrentItems item = currentItems.get(c.id);
+        if(item == null)
+        {
+            item = c;
+        }
+        else{
+            item.amount = item.amount + 1;
+        }
+        currentItems.put(item.id, item);
+
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
