@@ -21,11 +21,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MainGameActivity extends AppCompatActivity implements
@@ -106,6 +106,9 @@ public class MainGameActivity extends AppCompatActivity implements
                             case R.id.action_train:
                                 break;
                             case R.id.action_walk:
+                                if(curLocation == null){
+                                    curLocation = getLastKnownLocation();
+                                }
                                 if(curLocation != null)
                                 {
                                     Bundle args = new Bundle();
@@ -122,7 +125,7 @@ public class MainGameActivity extends AppCompatActivity implements
                     }
         });
         db = new Database(this);
-        Cursor cursor = db.getData(Const.databaseView.ALL_ITEMS);
+        Cursor cursor = db.getData(Const.databaseView.CURRENT_ITEMS);
         cursor.moveToFirst();
         while (!cursor.isAfterLast())
         {
@@ -165,7 +168,28 @@ public class MainGameActivity extends AppCompatActivity implements
         editor.putInt(Const.SHARED_HUNGER, valHunger);
         editor.commit();
     }
-
+    private Location getLastKnownLocation() {
+        List<String> providers = locationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            Location l = null;
+            if(checkLocationPermission())
+            {
+                l = locationManager.getLastKnownLocation(provider);
+            }
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null
+                    || l.getAccuracy() < bestLocation.getAccuracy()) {
+                bestLocation = l;
+            }
+        }
+        if (bestLocation == null) {
+            return null;
+        }
+        return bestLocation;
+    }
     private int calculateStatValue() {
         Date currDate = new Date();
         long timeDiff = currDate.getTime() - lastDate.getTime();

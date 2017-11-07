@@ -117,14 +117,14 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
     private void insertJSONStartingData(SQLiteDatabase db){
         try {
-            JSONArray jsonArray = getJSONArray(R.raw.items);
+            JSONArray jsonArray = getJSONArray(R.raw.starting_items);
             ContentValues contentValues;
             for (int i=0; i<jsonArray.length(); i++){
                 JSONObject jb = (JSONObject) jsonArray.get(i);
                 contentValues = new ContentValues();
                 contentValues.put(Const.CURRENT_ITEMS_ID, jb.getString(Const.CURRENT_ITEMS_ID));
                 contentValues.put(Const.CURRENT_ITEMS_AMOUNT, jb.getString(Const.CURRENT_ITEMS_AMOUNT));
-                long id = db.insert(Const.ITEM_TABLE_NAME, null, contentValues);
+                long id = db.insert(Const.CURRENT_ITEMS_TABLE_NAME, null, contentValues);
                 Log.d("SQLITEHELPER", "insert data id" + id);
             }
         } catch (JSONException e) {

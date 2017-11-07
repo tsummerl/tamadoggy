@@ -30,6 +30,10 @@ public class Database {
                 cursor = db.query(Const.ITEM_TABLE_NAME, allItemsColumns, null, null, null, null, null);
                 break;
             case CURRENT_ITEMS:
+//                String[] currItemsColumns = {Const.UID, Const.CURRENT_ITEMS_ID, Const.CURRENT_ITEMS_AMOUNT};
+//                cursor = db.query(Const.CURRENT_ITEMS_TABLE_NAME, currItemsColumns, null, null, null, null, null);
+                cursor = db.rawQuery("SELECT * FROM " + Const.CURRENT_ITEMS_TABLE_NAME + " as currentItems, " + Const.ITEM_TABLE_NAME
+                        +" as  items WHERE items._id = currentItems.ItemID" , null);
                 break;
         }
         return cursor;
