@@ -1,15 +1,24 @@
 package summerland.twilight.tamadoggy;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -26,13 +35,20 @@ public class MainGameActivity extends AppCompatActivity implements
     SharedPreferences sPref;
     Database db;
 
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     int valHunger, valFitness, valHygiene, valFun, nextUpdate;
     Date lastDate;
+    Location curLocation;
 
     Fragment fragmentMain;
     Fragment fragmentWalk;
     Fragment fragmentShop;
     Fragment fragmentInventory;
+
+
+    LocationManager locationManager;
+    LocationListener locationListener;
+
     Handler handleStat;
     private Runnable runnable = new Runnable() {
         @Override
@@ -56,10 +72,17 @@ public class MainGameActivity extends AppCompatActivity implements
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation_game);
 
+
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new MyLocationListener();
+        if(checkLocationPermission())
+        {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        }
+
         final FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentMain = new MainFragment();
         fragmentWalk = new WalkFragment();
-
         FragmentTransaction fragmentTransactionHome = fragmentManager.beginTransaction();
         fragmentTransactionHome.replace(R.id.fragmentHolder, fragmentMain);
         fragmentTransactionHome.addToBackStack(null);
@@ -83,6 +106,13 @@ public class MainGameActivity extends AppCompatActivity implements
                             case R.id.action_train:
                                 break;
                             case R.id.action_walk:
+                                if(curLocation != null)
+                                {
+                                    Bundle args = new Bundle();
+                                    args.putDouble("LAT", curLocation.getLatitude());
+                                    args.putDouble("LONG", curLocation.getLongitude());
+                                    fragmentWalk.setArguments(args);
+                                }
                                 FragmentTransaction fragmentTransactionWalk = fragmentManager.beginTransaction();
                                 fragmentTransactionWalk.replace(R.id.fragmentHolder, fragmentWalk);
                                 fragmentTransactionWalk.commit();
@@ -106,6 +136,9 @@ public class MainGameActivity extends AppCompatActivity implements
 
     }
 
+    public void updateGPS(double lat, double lon){
+
+    }
     @Override
     protected void onResume(){
         super.onResume();
@@ -147,17 +180,91 @@ public class MainGameActivity extends AppCompatActivity implements
         }
         return 59 - (intTimeDiff % 60); //remaining time until next update;
     }
-//    private void setProgress()
-//    {
-//        progFitness.setProgress(valFitness);
-//        progFun.setProgress(valFun);
-//        progHygiene.setProgress(valHygiene);
-//        progHunger.setProgress(valHunger);
-//
-//        textHygiene.setText("" + valHygiene);
-//        textFun.setText("" + valFun);
-//        textHunger.setText("" + valHunger);
-//        textFitness.setText("" + valFitness);
-//    }
+
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(this)
+                        .setTitle("Request Location")
+                        .setMessage("Tamadoggy needs to know your location")
+                        .setPositiveButton("Grant Permission", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(MainGameActivity.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+    public class MyLocationListener implements LocationListener{
+
+        public void onLocationChanged(Location location) {
+            curLocation = location;
+        }
+        public void onProviderDisabled(String arg0) {
+
+        }
+        public void onProviderEnabled(String provider) {
+
+        }
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
+                    if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+
+                        //Request location updates:
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                    }
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                }
+                return;
+            }
+
+        }
+    }
 
 }
