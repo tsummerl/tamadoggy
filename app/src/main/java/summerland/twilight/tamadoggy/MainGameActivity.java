@@ -88,7 +88,6 @@ public class MainGameActivity extends AppCompatActivity implements
         fragmentInventory = new ItemsFragment();
         FragmentTransaction fragmentTransactionHome = fragmentManager.beginTransaction();
         fragmentTransactionHome.replace(R.id.fragmentHolder, fragmentMain);
-        fragmentTransactionHome.addToBackStack(null);
         fragmentTransactionHome.commit();
 
         bottomNav.setOnNavigationItemSelectedListener(
