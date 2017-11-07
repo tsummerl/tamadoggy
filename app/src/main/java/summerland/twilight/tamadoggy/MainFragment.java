@@ -36,6 +36,7 @@ public class MainFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    int hunger, fitness, hygiene, fun;
     ProgressBar progHunger, progFitness, progHygiene, progFun;
     TextView textHunger, textFitness, textHygiene, textFun;
 
@@ -83,6 +84,7 @@ public class MainFragment extends Fragment {
         textFun = v.findViewById(R.id.textFun);
         textHunger = v.findViewById(R.id.textHunger);
         textHygiene = v.findViewById(R.id.textHygiene);
+
         return v;
     }
 
@@ -105,6 +107,11 @@ public class MainFragment extends Fragment {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        updateUI();
+    }
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
@@ -112,15 +119,27 @@ public class MainFragment extends Fragment {
     public void setProgress(int valFitness, int valFun, int valHygiene, int valHunger)
     {
         try{
-            progFitness.setProgress(valFitness);
-            progFun.setProgress(valFun);
-            progHygiene.setProgress(valHygiene);
-            progHunger.setProgress(valHunger);
+            fitness = valFitness;
+            fun = valFun;
+            hygiene = valHygiene;
+            hunger = valHunger;
+            updateUI();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    private void updateUI(){
+        try{
+            progFitness.setProgress(fitness);
+            progFun.setProgress(fun);
+            progHygiene.setProgress(hygiene);
+            progHunger.setProgress(hunger);
 
-            textHygiene.setText("" + valHygiene);
-            textFun.setText("" + valFun);
-            textHunger.setText("" + valHunger);
-            textFitness.setText("" + valFitness);
+            textHygiene.setText("" + hygiene);
+            textFun.setText("" + fun);
+            textHunger.setText("" + hunger);
+            textFitness.setText("" + fitness);
         }
         catch (Exception e){
             e.printStackTrace();
