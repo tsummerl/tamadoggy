@@ -11,7 +11,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Handler;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -59,8 +58,6 @@ public class MainGameActivity extends AppCompatActivity implements
             valFun = valFun - 3;
             valFitness = valFitness -2;
             valHygiene = valHygiene -1;
-
-            //setProgress();
             lastDate = new Date();
 //            handleStat.postDelayed(this, TimeUnit.MINUTES.toMillis(1));
             handleStat.postDelayed(this, TimeUnit.HOURS.toMillis(1));

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:padding="10dp">
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="2">
+            <TextView
+                android:layout_weight="2"
+                android:fontFamily="@font/baloo_chettan"
+                android:gravity="left"
+                android:text="item Name"/>
+
+            <TextView
+                android:layout_weight="2"
+                android:fontFamily="@font/baloo_chettan"
+                android:gravity="right"
+                android:textColor="@color/colorAccent"
+                android:text="x2" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="right">
+                <Button
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:backgroundTint="@android:color/holo_orange_light"
+                    android:fontFamily="@font/baloo_chettan"
+                    android:text="Use"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:layout_alignParentRight="true"/>
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_weight="2"/>
+        </TableRow>
+    </TableLayout>
+</android.support.constraint.ConstraintLayout>
