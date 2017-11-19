@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -78,11 +79,35 @@ public class MainGameActivity extends AppCompatActivity implements
         {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
-
+        db = new Database(this);
+        Cursor cursor = db.getData(Const.databaseView.CURRENT_ITEMS);
+        cursor.moveToFirst();
+        HashMap<Integer, Const.CurrentItems> currentItems = new HashMap<Integer, Const.CurrentItems>();
+        while (!cursor.isAfterLast())
+        {
+            String name = cursor.getString(cursor.getColumnIndex(Const.ITEM_NAME));
+            int itemId, itemFun, itemFitness, itemHygiene, itemAmount, itemHunger;
+            itemId = cursor.getInt(cursor.getColumnIndex(Const.CURRENT_ITEMS_ID));
+            itemAmount = cursor.getInt(cursor.getColumnIndex(Const.CURRENT_ITEMS_AMOUNT));
+            itemFun = cursor.getInt(cursor.getColumnIndex(Const.ITEM_FUN));
+            itemFitness = cursor.getInt(cursor.getColumnIndex(Const.ITEM_FITNESS));
+            itemHunger = cursor.getInt(cursor.getColumnIndex(Const.ITEM_HUNGER));
+            itemHygiene = cursor.getInt(cursor.getColumnIndex(Const.ITEM_HYGIENE));
+            cursor.moveToNext();
+            Const.CurrentItems curItem = new Const.CurrentItems();
+            curItem.hunger = itemHunger;
+            curItem.fun = itemFun;
+            curItem.fitness = itemFitness;
+            curItem.hygiene = itemHygiene;
+            curItem.amount = itemAmount;
+            curItem.id = itemId;
+            curItem.itemName = name;
+            currentItems.put(curItem.id, curItem);
+        }
         final FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentMain = new MainFragment();
         fragmentWalk = new WalkFragment();
-        fragmentInventory = new ItemsFragment();
+        fragmentInventory = ItemsFragment.newInstance(currentItems);
         FragmentTransaction fragmentTransactionHome = fragmentManager.beginTransaction();
         fragmentTransactionHome.replace(R.id.fragmentHolder, fragmentMain);
         fragmentTransactionHome.commit();
@@ -126,30 +151,6 @@ public class MainGameActivity extends AppCompatActivity implements
                         return true;
                     }
         });
-        db = new Database(this);
-        Cursor cursor = db.getData(Const.databaseView.CURRENT_ITEMS);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast())
-        {
-            String name = cursor.getString(cursor.getColumnIndex(Const.ITEM_NAME));
-            int itemId, itemFun, itemFitness, itemHygiene, itemAmount, itemHunger;
-            itemId = cursor.getInt(cursor.getColumnIndex(Const.CURRENT_ITEMS_ID));
-            itemAmount = cursor.getInt(cursor.getColumnIndex(Const.CURRENT_ITEMS_AMOUNT));
-            itemFun = cursor.getInt(cursor.getColumnIndex(Const.ITEM_FUN));
-            itemFitness = cursor.getInt(cursor.getColumnIndex(Const.ITEM_FITNESS));
-            itemHunger = cursor.getInt(cursor.getColumnIndex(Const.ITEM_HUNGER));
-            itemHygiene = cursor.getInt(cursor.getColumnIndex(Const.ITEM_HYGIENE));
-            cursor.moveToNext();
-            Const.CurrentItems curItem = new Const.CurrentItems();
-            curItem.hunger = itemHunger;
-            curItem.fun = itemFun;
-            curItem.fitness = itemFitness;
-            curItem.hygiene = itemHygiene;
-            curItem.amount = itemAmount;
-            curItem.id = itemId;
-            curItem.itemName = name;
-            ((ItemsFragment) fragmentInventory).addItemToView(curItem);
-        }
     }
 
     @Override

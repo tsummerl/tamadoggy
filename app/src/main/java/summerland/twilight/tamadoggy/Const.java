@@ -56,9 +56,6 @@ public final class Const {
     }
 
     public static final class CurrentItems{
-        public CurrentItems() {
-            ;
-        }
         int id;
         String itemName;
         int hunger, fun, fitness, hygiene, amount;

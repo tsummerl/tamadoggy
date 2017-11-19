@@ -30,7 +30,7 @@
 
     <style name="AppButtonStyle">
         <item name="android:backgroundTint">@android:color/holo_orange_light</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
         <item name="android:fontFamily">@font/baloo_chettan</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
