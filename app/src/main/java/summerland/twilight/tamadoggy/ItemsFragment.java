@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.ButtonBarLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ public class ItemsFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private View v;
     private LinearLayout layout;
+    private RecyclerView.LayoutManager m_layoutManager;
     private HashMap<Integer, Const.CurrentItems> m_currentItems;
     private RecyclerView m_recycler;
     private ItemAdapter m_adapter;
@@ -69,6 +71,8 @@ public class ItemsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_items, container, false);
         layout = v.findViewById(R.id.linearHolder);
         m_recycler = (RecyclerView) v.findViewById(R.id.recyclerCurrentItems);
+        m_layoutManager = new LinearLayoutManager(getContext());
+        m_recycler.setLayoutManager(m_layoutManager);
         m_adapter = new ItemAdapter(m_currentItems);
         m_recycler.setAdapter(m_adapter);
         return v;

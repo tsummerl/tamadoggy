@@ -37,7 +37,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.populate(currentItems.get(position));
+        holder.populate(currentItems, getItemCount());
     }
 
     @Override
@@ -48,7 +48,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        Const.CurrentItems m_item;
+        ArrayList<Const.CurrentItems> m_currentItems;
+        int m_size;
         TextView m_itemName, m_itemAmount;
         Button m_buttonUse;
         Context m_context;
@@ -59,13 +60,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
             m_buttonUse = itemView.findViewById(R.id.buttonItemUse);
             m_context = itemView.getContext();
         }
-        public void populate(Const.CurrentItems item)
+        public void populate(ArrayList<Const.CurrentItems> items, int size)
         {
-            m_item = item;
+            m_size = size;
+            m_currentItems = items;
+            Const.CurrentItems item = items.get(getAdapterPosition());
             if(item != null)
             {
-                m_itemName.setText(m_item.itemName);
-                m_itemAmount.setText(""+m_item.amount);
+                m_itemName.setText(item.itemName);
+                m_itemAmount.setText(""+item.amount);
                 m_buttonUse.setOnClickListener(this);
             }
         }
@@ -73,8 +76,23 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
         public void onClick(View view) {
             if(view.getId() == R.id.buttonItemUse)
             {
+                Const.CurrentItems item = m_currentItems.get(getAdapterPosition());
                 Toast.makeText(m_context,
-                        "You have clicked " + m_item.itemName,Toast.LENGTH_SHORT).show();
+                        "You have clicked " + item.itemName,Toast.LENGTH_SHORT).show();
+                int val = item.amount;
+                if(val < 2)
+                {
+                    m_currentItems.remove(getAdapterPosition());
+                    notifyItemRemoved(getAdapterPosition());
+                    notifyItemRangeChanged(getAdapterPosition(), m_size);
+                    m_size --;
+                }
+                else{
+                    item.amount = item.amount - 1;
+                    notifyItemChanged(getAdapterPosition());
+                }
+
+
             }
         }
     }
