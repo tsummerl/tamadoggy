@@ -2,6 +2,7 @@ package summerland.twilight.tamadoggy;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +24,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
 
     private ArrayList<Const.CurrentItems> currentItems;
 
-    public ItemAdapter(HashMap<Integer, Const.CurrentItems> items)
+    public ItemAdapter(ArrayList<Const.CurrentItems> items)
     {
-        currentItems = new ArrayList<Const.CurrentItems>(items.values());
+        currentItems = items;
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
@@ -76,20 +77,26 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
         public void onClick(View view) {
             if(view.getId() == R.id.buttonItemUse)
             {
-                Const.CurrentItems item = m_currentItems.get(getAdapterPosition());
-                Toast.makeText(m_context,
-                        "You have clicked " + item.itemName,Toast.LENGTH_SHORT).show();
-                int val = item.amount;
-                if(val < 2)
-                {
-                    m_currentItems.remove(getAdapterPosition());
-                    notifyItemRemoved(getAdapterPosition());
-                    notifyItemRangeChanged(getAdapterPosition(), m_size);
-                    m_size --;
+                try{
+                    Const.CurrentItems item = m_currentItems.get(getAdapterPosition());
+                    int val = item.amount;
+                    int itemID = item.id;
+                    if(val < 2)
+                    {
+                        m_currentItems.remove(getAdapterPosition());
+                        notifyItemRemoved(getAdapterPosition());
+                        notifyItemRangeChanged(getAdapterPosition(), m_size);
+                        m_size --;
+                    }
+                    else{
+                        item.amount = item.amount - 1;
+                        notifyItemChanged(getAdapterPosition());
+                    }
+                    ((MainGameActivity)m_context).useItem(itemID);
                 }
-                else{
-                    item.amount = item.amount - 1;
-                    notifyItemChanged(getAdapterPosition());
+                catch (ArrayIndexOutOfBoundsException e)
+                {
+                    Log.d("ITEM ADPATER", "array out of bounds, click to fast?");
                 }
 
 

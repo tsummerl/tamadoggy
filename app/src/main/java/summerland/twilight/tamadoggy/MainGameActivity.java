@@ -24,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,32 +35,34 @@ public class MainGameActivity extends AppCompatActivity implements
         WalkFragment.OnFragmentInteractionListener,
         ItemsFragment.OnFragmentInteractionListener{
 
-    SharedPreferences sPref;
-    Database db;
+    SharedPreferences m_sPref;
+    Database m_db;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    int valHunger, valFitness, valHygiene, valFun, nextUpdate;
-    Date lastDate;
-    Location curLocation;
+    int m_valHunger, m_valFitness, m_valHygiene, m_valFun, m_nextUpdate;
+    HashMap<Integer, Const.Items> m_itemsMaps;
+    Date m_lastDate;
+    Location m_curLocation;
 
-    Fragment fragmentMain;
-    Fragment fragmentWalk;
-    Fragment fragmentShop;
-    Fragment fragmentInventory;
+    Fragment m_fragmentMain;
+    Fragment m_fragmentWalk;
+    Fragment m_fragmentShop;
+    Fragment m_fragmentInventory;
 
 
-    LocationManager locationManager;
-    LocationListener locationListener;
+    LocationManager m_locationManager;
+    LocationListener m_locationListener;
 
     Handler handleStat;
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            valHunger = valHunger -2;
-            valFun = valFun - 3;
-            valFitness = valFitness -2;
-            valHygiene = valHygiene -1;
-            lastDate = new Date();
+            m_valHunger = m_valHunger -2;
+            m_valFun = m_valFun - 3;
+            m_valFitness = m_valFitness -2;
+            m_valHygiene = m_valHygiene -1;
+            m_lastDate = new Date();
+            ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger);
 //            handleStat.postDelayed(this, TimeUnit.MINUTES.toMillis(1));
             handleStat.postDelayed(this, TimeUnit.HOURS.toMillis(1));
         }
@@ -68,21 +71,74 @@ public class MainGameActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_game);
-        sPref = getSharedPreferences(Const.SHARED_BASIC_GAME_DATA, Context.MODE_PRIVATE);
+        m_sPref = getSharedPreferences(Const.SHARED_BASIC_GAME_DATA, Context.MODE_PRIVATE);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation_game);
 
 
-        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new MyLocationListener();
+        m_locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        m_locationListener = new MyLocationListener();
         if(checkLocationPermission())
         {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, m_locationListener);
         }
-        db = new Database(this);
-        Cursor cursor = db.getData(Const.databaseView.CURRENT_ITEMS);
+        m_db = new Database(this);
+        ArrayList<Const.CurrentItems> currentItems = getCurrentItems();
+        m_itemsMaps = getItems();
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        m_fragmentMain = new MainFragment();
+        m_fragmentWalk = new WalkFragment();
+        m_fragmentInventory = ItemsFragment.newInstance(currentItems);
+        FragmentTransaction fragmentTransactionHome = fragmentManager.beginTransaction();
+        fragmentTransactionHome.replace(R.id.fragmentHolder, m_fragmentMain);
+        fragmentTransactionHome.commit();
+
+        bottomNav.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch(item.getItemId())
+                        {
+                            case R.id.action_home:
+                                FragmentTransaction fragmentTransactionHome = fragmentManager.beginTransaction();
+                                fragmentTransactionHome.replace(R.id.fragmentHolder, m_fragmentMain);
+                                fragmentTransactionHome.commit();
+                                break;
+                            case R.id.action_inventory:
+                                FragmentTransaction fragmentTransactionInvent = fragmentManager.beginTransaction();
+                                fragmentTransactionInvent.replace(R.id.fragmentHolder, m_fragmentInventory);
+                                fragmentTransactionInvent.commit();
+                                break;
+                            case R.id.action_shop:
+                                break;
+                            case R.id.action_train:
+                                break;
+                            case R.id.action_walk:
+                                if(m_curLocation == null){
+                                    m_curLocation = getLastKnownLocation();
+                                }
+                                if(m_curLocation != null)
+                                {
+                                    Bundle args = new Bundle();
+                                    args.putDouble("LAT", m_curLocation.getLatitude());
+                                    args.putDouble("LONG", m_curLocation.getLongitude());
+                                    m_fragmentWalk.setArguments(args);
+                                }
+                                FragmentTransaction fragmentTransactionWalk = fragmentManager.beginTransaction();
+                                fragmentTransactionWalk.replace(R.id.fragmentHolder, m_fragmentWalk);
+                                fragmentTransactionWalk.commit();
+                                break;
+                        }
+                        return true;
+                    }
+        });
+    }
+
+    private ArrayList<Const.CurrentItems> getCurrentItems()
+    {
+        Cursor cursor = m_db.getData(Const.databaseView.CURRENT_ITEMS);
         cursor.moveToFirst();
-        HashMap<Integer, Const.CurrentItems> currentItems = new HashMap<Integer, Const.CurrentItems>();
+        ArrayList<Const.CurrentItems> currentItems = new ArrayList <Const.CurrentItems>();
         while (!cursor.isAfterLast())
         {
             String name = cursor.getString(cursor.getColumnIndex(Const.ITEM_NAME));
@@ -102,57 +158,36 @@ public class MainGameActivity extends AppCompatActivity implements
             curItem.amount = itemAmount;
             curItem.id = itemId;
             curItem.itemName = name;
-            currentItems.put(curItem.id, curItem);
+            currentItems.add(curItem);
         }
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentMain = new MainFragment();
-        fragmentWalk = new WalkFragment();
-        fragmentInventory = ItemsFragment.newInstance(currentItems);
-        FragmentTransaction fragmentTransactionHome = fragmentManager.beginTransaction();
-        fragmentTransactionHome.replace(R.id.fragmentHolder, fragmentMain);
-        fragmentTransactionHome.commit();
-
-        bottomNav.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch(item.getItemId())
-                        {
-                            case R.id.action_home:
-                                FragmentTransaction fragmentTransactionHome = fragmentManager.beginTransaction();
-                                fragmentTransactionHome.replace(R.id.fragmentHolder, fragmentMain);
-                                fragmentTransactionHome.commit();
-                                break;
-                            case R.id.action_inventory:
-                                FragmentTransaction fragmentTransactionInvent = fragmentManager.beginTransaction();
-                                fragmentTransactionInvent.replace(R.id.fragmentHolder, fragmentInventory);
-                                fragmentTransactionInvent.commit();
-                                break;
-                            case R.id.action_shop:
-                                break;
-                            case R.id.action_train:
-                                break;
-                            case R.id.action_walk:
-                                if(curLocation == null){
-                                    curLocation = getLastKnownLocation();
-                                }
-                                if(curLocation != null)
-                                {
-                                    Bundle args = new Bundle();
-                                    args.putDouble("LAT", curLocation.getLatitude());
-                                    args.putDouble("LONG", curLocation.getLongitude());
-                                    fragmentWalk.setArguments(args);
-                                }
-                                FragmentTransaction fragmentTransactionWalk = fragmentManager.beginTransaction();
-                                fragmentTransactionWalk.replace(R.id.fragmentHolder, fragmentWalk);
-                                fragmentTransactionWalk.commit();
-                                break;
-                        }
-                        return true;
-                    }
-        });
+        return currentItems;
     }
-
+    private HashMap<Integer, Const.Items> getItems()
+    {
+        Cursor cursor = m_db.getData(Const.databaseView.ALL_ITEMS);
+        cursor.moveToFirst();
+        HashMap<Integer, Const.Items> items = new HashMap<Integer, Const.Items>();
+        while (!cursor.isAfterLast())
+        {
+            String name = cursor.getString(cursor.getColumnIndex(Const.ITEM_NAME));
+            int itemId, itemFun, itemFitness, itemHygiene, itemHunger;
+            itemId = cursor.getInt(cursor.getColumnIndex(Const.UID));
+            itemFun = cursor.getInt(cursor.getColumnIndex(Const.ITEM_FUN));
+            itemFitness = cursor.getInt(cursor.getColumnIndex(Const.ITEM_FITNESS));
+            itemHunger = cursor.getInt(cursor.getColumnIndex(Const.ITEM_HUNGER));
+            itemHygiene = cursor.getInt(cursor.getColumnIndex(Const.ITEM_HYGIENE));
+            cursor.moveToNext();
+            Const.Items curItem = new Const.Items();
+            curItem.hunger = itemHunger;
+            curItem.fun = itemFun;
+            curItem.fitness = itemFitness;
+            curItem.hygiene = itemHygiene;
+            curItem.id = itemId;
+            curItem.itemName = name;
+            items.put(curItem.id, curItem);
+        }
+        return items;
+    }
     @Override
     public void onFragmentInteraction(Uri uri) {
 
@@ -164,37 +199,37 @@ public class MainGameActivity extends AppCompatActivity implements
     @Override
     protected void onResume(){
         super.onResume();
-        valHunger = sPref.getInt(Const.SHARED_HUNGER, -1);
-        valFitness = sPref.getInt(Const.SHARED_FITNESS, -1);
-        valHygiene = sPref.getInt(Const.SHARED_HYGIENE, -1);
-        valFun = sPref.getInt(Const.SHARED_FUN, -1);
-        lastDate = new Date(sPref.getLong(Const.SHARED_DATE_LAST_GAME_UPDATE, 0));
-        nextUpdate = calculateStatValue();
+        m_valHunger = m_sPref.getInt(Const.SHARED_HUNGER, -1);
+        m_valFitness = m_sPref.getInt(Const.SHARED_FITNESS, -1);
+        m_valHygiene = m_sPref.getInt(Const.SHARED_HYGIENE, -1);
+        m_valFun = m_sPref.getInt(Const.SHARED_FUN, -1);
+        m_lastDate = new Date(m_sPref.getLong(Const.SHARED_DATE_LAST_GAME_UPDATE, 0));
+        m_nextUpdate = calculateStatValue();
 
-        ((MainFragment) fragmentMain).setProgress(valFitness, valFun, valHygiene, valHunger);
+        ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger);
         handleStat = new Handler();
         //handleStat.postDelayed(runnable, TimeUnit.MINUTES.toMillis(1));
-        handleStat.postDelayed(runnable, TimeUnit.MINUTES.toMillis(nextUpdate));
+        handleStat.postDelayed(runnable, TimeUnit.MINUTES.toMillis(m_nextUpdate));
     }
     @Override
     protected void onPause(){
         super.onPause();
-        SharedPreferences.Editor editor = sPref.edit();
-        editor.putLong(Const.SHARED_DATE_LAST_GAME_UPDATE, lastDate.getTime());
-        editor.putInt(Const.SHARED_FUN, valFun);
-        editor.putInt(Const.SHARED_HYGIENE, valHygiene);
-        editor.putInt(Const.SHARED_FITNESS, valFitness);
-        editor.putInt(Const.SHARED_HUNGER, valHunger);
+        SharedPreferences.Editor editor = m_sPref.edit();
+        editor.putLong(Const.SHARED_DATE_LAST_GAME_UPDATE, m_lastDate.getTime());
+        editor.putInt(Const.SHARED_FUN, m_valFun);
+        editor.putInt(Const.SHARED_HYGIENE, m_valHygiene);
+        editor.putInt(Const.SHARED_FITNESS, m_valFitness);
+        editor.putInt(Const.SHARED_HUNGER, m_valHunger);
         editor.commit();
     }
     private Location getLastKnownLocation() {
-        List<String> providers = locationManager.getProviders(true);
+        List<String> providers = m_locationManager.getProviders(true);
         Location bestLocation = null;
         for (String provider : providers) {
             Location l = null;
             if(checkLocationPermission())
             {
-                l = locationManager.getLastKnownLocation(provider);
+                l = m_locationManager.getLastKnownLocation(provider);
             }
             if (l == null) {
                 continue;
@@ -211,20 +246,27 @@ public class MainGameActivity extends AppCompatActivity implements
     }
     private int calculateStatValue() {
         Date currDate = new Date();
-        long timeDiff = currDate.getTime() - lastDate.getTime();
+        long timeDiff = currDate.getTime() - m_lastDate.getTime();
         int intTimeDiff = (int) TimeUnit.MILLISECONDS.toMinutes(timeDiff);
         if (intTimeDiff >= 60) {
-            valHunger = valHunger - (2 * (intTimeDiff / 60));
-            valFun = valFun - (3 * (intTimeDiff / 60));
-            valFitness = valFitness - (2 * (intTimeDiff / 60));
-            valHygiene = valHygiene - (1 * (intTimeDiff / 60));
+            m_valHunger = m_valHunger - (2 * (intTimeDiff / 60));
+            m_valFun = m_valFun - (3 * (intTimeDiff / 60));
+            m_valFitness = m_valFitness - (2 * (intTimeDiff / 60));
+            m_valHygiene = m_valHygiene - (1 * (intTimeDiff / 60));
 
-            lastDate = new Date(lastDate.getTime() + TimeUnit.HOURS.toMillis(intTimeDiff / 60));
+            m_lastDate = new Date(m_lastDate.getTime() + TimeUnit.HOURS.toMillis(intTimeDiff / 60));
         }
         return 59 - (intTimeDiff % 60); //remaining time until next update;
     }
-    public void useItem(){
+    public void useItem(int id){
         ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(150);
+        Const.Items item = m_itemsMaps.get(id);
+        m_valHunger = m_valHunger + item.hunger;
+        m_valFitness = m_valFitness + item.fitness;
+        m_valFun = m_valFun + item.fun;
+        m_valHygiene = m_valHygiene + item.hygiene;
+        ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger);
+
     }
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
@@ -268,7 +310,7 @@ public class MainGameActivity extends AppCompatActivity implements
     public class MyLocationListener implements LocationListener{
 
         public void onLocationChanged(Location location) {
-            curLocation = location;
+            m_curLocation = location;
         }
         public void onProviderDisabled(String arg0) {
 
@@ -296,7 +338,7 @@ public class MainGameActivity extends AppCompatActivity implements
                             == PackageManager.PERMISSION_GRANTED) {
 
                         //Request location updates:
-                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                        m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, m_locationListener);
                     }
 
                 } else {

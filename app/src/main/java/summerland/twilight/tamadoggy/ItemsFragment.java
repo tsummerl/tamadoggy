@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class ItemsFragment extends Fragment {
     private View v;
     private LinearLayout layout;
     private RecyclerView.LayoutManager m_layoutManager;
-    private HashMap<Integer, Const.CurrentItems> m_currentItems;
+    private ArrayList<Const.CurrentItems> m_currentItems;
     private RecyclerView m_recycler;
     private ItemAdapter m_adapter;
     public ItemsFragment() {
@@ -49,7 +50,7 @@ public class ItemsFragment extends Fragment {
      * @return A new instance of fragment ItemsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ItemsFragment newInstance(HashMap<Integer, Const.CurrentItems> items) {
+    public static ItemsFragment newInstance(ArrayList<Const.CurrentItems> items) {
         ItemsFragment fragment = new ItemsFragment();
         Bundle args = new Bundle();
         args.putSerializable(ITEMS_KEY, items);
@@ -67,10 +68,10 @@ public class ItemsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        m_currentItems = (HashMap<Integer, Const.CurrentItems>) getArguments().getSerializable(ITEMS_KEY);
+        m_currentItems = (ArrayList<Const.CurrentItems>) getArguments().getSerializable(ITEMS_KEY);
         View v = inflater.inflate(R.layout.fragment_items, container, false);
         layout = v.findViewById(R.id.linearHolder);
-        m_recycler = (RecyclerView) v.findViewById(R.id.recyclerCurrentItems);
+        m_recycler = v.findViewById(R.id.recyclerCurrentItems);
         m_layoutManager = new LinearLayoutManager(getContext());
         m_recycler.setLayoutManager(m_layoutManager);
         m_adapter = new ItemAdapter(m_currentItems);

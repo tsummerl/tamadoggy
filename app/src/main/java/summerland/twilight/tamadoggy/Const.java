@@ -60,6 +60,12 @@ public final class Const {
         String itemName;
         int hunger, fun, fitness, hygiene, amount;
     }
+
+    public static final class Items{
+        int id;
+        String itemName;
+        int hunger, fun, fitness, hygiene, cost;
+    }
     private Const(){
         throw new AssertionError();
     }
