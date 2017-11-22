@@ -36,9 +36,9 @@ public class MainFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    int hunger, fitness, hygiene, fun;
+    int hunger, fitness, hygiene, fun, cash;
     ProgressBar progHunger, progFitness, progHygiene, progFun;
-    TextView textHunger, textFitness, textHygiene, textFun;
+    TextView textHunger, textFitness, textHygiene, textFun, textCash;
 
     public MainFragment() {
         // Required empty public constructor
@@ -84,6 +84,7 @@ public class MainFragment extends Fragment {
         textFun = v.findViewById(R.id.textFun);
         textHunger = v.findViewById(R.id.textHunger);
         textHygiene = v.findViewById(R.id.textHygiene);
+        textCash = v.findViewById(R.id.textCash);
 
         return v;
     }
@@ -116,13 +117,14 @@ public class MainFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-    public void setProgress(int valFitness, int valFun, int valHygiene, int valHunger)
+    public void setProgress(int valFitness, int valFun, int valHygiene, int valHunger, int valCash)
     {
         try{
             fitness = valFitness;
             fun = valFun;
             hygiene = valHygiene;
             hunger = valHunger;
+            cash = valCash;
             updateUI();
         }
         catch (Exception e){
@@ -140,6 +142,7 @@ public class MainFragment extends Fragment {
             textFun.setText("" + fun);
             textHunger.setText("" + hunger);
             textFitness.setText("" + fitness);
+            textCash.setText("Cash: " + cash);
         }
         catch (Exception e){
             e.printStackTrace();

@@ -46,6 +46,7 @@ public class NewGameActivity extends AppCompatActivity implements View.OnClickLi
             sharedEdit.putInt(Const.SHARED_FUN, 100);
             sharedEdit.putInt(Const.SHARED_HYGIENE, 100);
             sharedEdit.putInt(Const.SHARED_HUNGER, 100);
+            sharedEdit.putInt(Const.SHARED_CASH, 100);
             sharedEdit.putString(Const.SHARED_DOGNAME, dogName);
             Database db = new Database(this);
             db.deleteDatabase();

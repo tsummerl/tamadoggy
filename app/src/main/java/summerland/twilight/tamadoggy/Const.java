@@ -17,6 +17,7 @@ public final class Const {
     public static final String SHARED_FITNESS = "FITNESS";
     public static final String SHARED_HYGIENE = "HYGIENE";
     public static final String SHARED_DOGNAME = "DOGNAME";
+    public static final String SHARED_CASH = "CASH";
     /// SQLite Database
 
     public static final String DATABASE_NAME = "dogDatabase";

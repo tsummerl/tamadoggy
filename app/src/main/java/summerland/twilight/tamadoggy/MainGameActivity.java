@@ -39,7 +39,7 @@ public class MainGameActivity extends AppCompatActivity implements
     Database m_db;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    int m_valHunger, m_valFitness, m_valHygiene, m_valFun, m_nextUpdate;
+    int m_valHunger, m_valFitness, m_valHygiene, m_valFun, m_nextUpdate, m_cash;
     HashMap<Integer, Const.Items> m_itemsMaps;
     Date m_lastDate;
     Location m_curLocation;
@@ -62,7 +62,7 @@ public class MainGameActivity extends AppCompatActivity implements
             m_valFitness = m_valFitness -2;
             m_valHygiene = m_valHygiene -1;
             m_lastDate = new Date();
-            ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger);
+            ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger, m_cash);
 //            handleStat.postDelayed(this, TimeUnit.MINUTES.toMillis(1));
             handleStat.postDelayed(this, TimeUnit.HOURS.toMillis(1));
         }
@@ -206,10 +206,11 @@ public class MainGameActivity extends AppCompatActivity implements
         m_valFitness = m_sPref.getInt(Const.SHARED_FITNESS, -1);
         m_valHygiene = m_sPref.getInt(Const.SHARED_HYGIENE, -1);
         m_valFun = m_sPref.getInt(Const.SHARED_FUN, -1);
+        m_cash = m_sPref.getInt(Const.SHARED_CASH, -1);
         m_lastDate = new Date(m_sPref.getLong(Const.SHARED_DATE_LAST_GAME_UPDATE, 0));
         m_nextUpdate = calculateStatValue();
 
-        ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger);
+        ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger, m_cash);
         handleStat = new Handler();
         //handleStat.postDelayed(runnable, TimeUnit.MINUTES.toMillis(1));
         handleStat.postDelayed(runnable, TimeUnit.MINUTES.toMillis(m_nextUpdate));
@@ -268,7 +269,7 @@ public class MainGameActivity extends AppCompatActivity implements
         m_valFitness = m_valFitness + item.fitness;
         m_valFun = m_valFun + item.fun;
         m_valHygiene = m_valHygiene + item.hygiene;
-        ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger);
+        ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger, m_cash);
         m_db.saveItems(id, amount);
 
     }
