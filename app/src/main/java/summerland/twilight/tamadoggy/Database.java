@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 /**
  * Created by Jake on 11/5/2017.
@@ -17,6 +18,16 @@ public class Database {
     public Database (Context c){
         context = c;
         dbHelper = new SQLiteHelper(context);
+    }
+
+    public void saveItems(int id, int amount)
+    {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String query = "UPDATE " + Const.CURRENT_ITEMS_TABLE_NAME + " SET " + Const.CURRENT_ITEMS_AMOUNT + " = " + amount
+                + " WHERE " + Const.CURRENT_ITEMS_ID + "=" + id + "; INSERT INTO " +
+                Const.CURRENT_ITEMS_TABLE_NAME + " (" + Const.CURRENT_ITEMS_ID + ", "
+                + Const.CURRENT_ITEMS_AMOUNT + ") VALUES(" + id + ", " + amount + ") WHERE changes() = 0";
+        db.execSQL(query);
     }
 
     public Cursor getData(Const.databaseView view)
@@ -37,5 +48,15 @@ public class Database {
                 break;
         }
         return cursor;
+    }
+    public void deleteDatabase()
+    {
+        try{
+            context.deleteDatabase(Const.DATABASE_NAME);
+        }
+        catch (Exception e)
+        {
+            Log.d("DATABASE", e.toString());
+        }
     }
 }

@@ -158,7 +158,10 @@ public class MainGameActivity extends AppCompatActivity implements
             curItem.amount = itemAmount;
             curItem.id = itemId;
             curItem.itemName = name;
-            currentItems.add(curItem);
+            if(itemAmount > 0)
+            {
+                currentItems.add(curItem);
+            }
         }
         return currentItems;
     }
@@ -258,7 +261,7 @@ public class MainGameActivity extends AppCompatActivity implements
         }
         return 59 - (intTimeDiff % 60); //remaining time until next update;
     }
-    public void useItem(int id){
+    public void useItem(int id, int amount){
         ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(150);
         Const.Items item = m_itemsMaps.get(id);
         m_valHunger = m_valHunger + item.hunger;
@@ -266,6 +269,7 @@ public class MainGameActivity extends AppCompatActivity implements
         m_valFun = m_valFun + item.fun;
         m_valHygiene = m_valHygiene + item.hygiene;
         ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger);
+        m_db.saveItems(id, amount);
 
     }
     public boolean checkLocationPermission() {

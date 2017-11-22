@@ -87,12 +87,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
                         notifyItemRemoved(getAdapterPosition());
                         notifyItemRangeChanged(getAdapterPosition(), m_size);
                         m_size --;
+                        val = 0;
                     }
                     else{
                         item.amount = item.amount - 1;
                         notifyItemChanged(getAdapterPosition());
+                        val = item.amount;
                     }
-                    ((MainGameActivity)m_context).useItem(itemID);
+                    ((MainGameActivity)m_context).useItem(itemID, val);
                 }
                 catch (ArrayIndexOutOfBoundsException e)
                 {
