@@ -19,7 +19,8 @@
             android:id="@+id/recyclerCurrentItems"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="LinearLayoutManager"/>
+            app:layoutManager="LinearLayoutManager"
+            android:paddingBottom="50dp"/>
     </LinearLayout>
 
 </FrameLayout>

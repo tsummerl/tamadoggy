@@ -30,7 +30,7 @@ public class StoreFragment extends Fragment {
     private RecyclerView.LayoutManager m_layoutManager;
     private ArrayList<Const.Items> m_storeItems;
     private RecyclerView m_recycler;
-    private ItemAdapter m_adapter;
+    private StoreAdapter m_adapter;
     private OnFragmentInteractionListener mListener;
 
     public StoreFragment() {
@@ -60,8 +60,8 @@ public class StoreFragment extends Fragment {
         m_storeItems = (ArrayList<Const.Items>) getArguments().getSerializable(ITEMS_KEY);
         layout = v.findViewById(R.id.linearHolderStore);
         m_recycler = v.findViewById(R.id.recyclerStoreItems);
-        //m_adapter = new ItemAdapter
-        //m_recycler.setAdapter(m_adpater);
+        m_adapter = new StoreAdapter(m_storeItems);
+        m_recycler.setAdapter(m_adapter);
         return v;
     }
 

@@ -33,7 +33,8 @@ import java.util.concurrent.TimeUnit;
 public class MainGameActivity extends AppCompatActivity implements
         MainFragment.OnFragmentInteractionListener,
         WalkFragment.OnFragmentInteractionListener,
-        ItemsFragment.OnFragmentInteractionListener{
+        ItemsFragment.OnFragmentInteractionListener,
+        StoreFragment.OnFragmentInteractionListener{
 
     SharedPreferences m_sPref;
     Database m_db;
@@ -113,6 +114,9 @@ public class MainGameActivity extends AppCompatActivity implements
                                 fragmentTransactionInvent.commit();
                                 break;
                             case R.id.action_shop:
+                                FragmentTransaction fragmentTransactionShop = fragmentManager.beginTransaction();
+                                fragmentTransactionShop.replace(R.id.fragmentHolder, m_fragmentShop);
+                                fragmentTransactionShop.commit();
                                 break;
                             case R.id.action_train:
                                 break;
@@ -176,14 +180,16 @@ public class MainGameActivity extends AppCompatActivity implements
         while (!cursor.isAfterLast())
         {
             String name = cursor.getString(cursor.getColumnIndex(Const.ITEM_NAME));
-            int itemId, itemFun, itemFitness, itemHygiene, itemHunger;
+            int itemId, itemFun, itemFitness, itemHygiene, itemHunger, itemCost;
             itemId = cursor.getInt(cursor.getColumnIndex(Const.UID));
             itemFun = cursor.getInt(cursor.getColumnIndex(Const.ITEM_FUN));
             itemFitness = cursor.getInt(cursor.getColumnIndex(Const.ITEM_FITNESS));
             itemHunger = cursor.getInt(cursor.getColumnIndex(Const.ITEM_HUNGER));
             itemHygiene = cursor.getInt(cursor.getColumnIndex(Const.ITEM_HYGIENE));
+            itemCost = cursor.getInt(cursor.getColumnIndex(Const.ITEM_COST));
             cursor.moveToNext();
             Const.Items curItem = new Const.Items();
+            curItem.cost = itemCost;
             curItem.hunger = itemHunger;
             curItem.fun = itemFun;
             curItem.fitness = itemFitness;

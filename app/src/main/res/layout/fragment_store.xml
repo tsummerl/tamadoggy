@@ -15,10 +15,22 @@
             android:layout_height="wrap_content"
             android:text="Store"
             style="@style/AppHeader"/>
+        <TextView
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cash: "
+            android:gravity="right"
+            android:fontFamily="@font/baloo_chettan"
+            android:textSize="20dp"
+            android:textColor="@color/colorAccent"
+            />
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerStoreItems"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="50dp"
             app:layoutManager="LinearLayoutManager"/>
     </LinearLayout>
 
