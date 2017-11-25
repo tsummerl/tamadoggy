@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static summerland.twilight.tamadoggy.R.layout.inventory_item_layout;
 
