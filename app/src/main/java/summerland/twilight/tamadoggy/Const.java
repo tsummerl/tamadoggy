@@ -65,7 +65,7 @@ public final class Const {
     public static final class Items{
         int id;
         String itemName;
-        int hunger, fun, fitness, hygiene, cost;
+        int hunger, fun, fitness, hygiene, cost, amount;
     }
     private Const(){
         throw new AssertionError();

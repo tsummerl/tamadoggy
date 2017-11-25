@@ -20,21 +20,22 @@
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:layout_weight="2"
-                android:id="@+id/textItemName"
+                android:id="@+id/textStoreItemName"
                 android:fontFamily="@font/baloo_chettan"
                 android:text="item Name"/>
+            <!--<TextView-->
+                <!--android:layout_weight="2"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center_horizontal"-->
+                <!--android:fontFamily="@font/baloo_chettan"-->
+                <!--android:text="Current x 2"-->
+                <!--android:id="@+id/textStoreItemAmount"-->
+                <!--android:textSize="12dp"/>-->
             <TextView
-                android:layout_weight="2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:fontFamily="@font/baloo_chettan"
-                android:text="Current x 2"
-                android:textSize="12dp"/>
-            <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:id="@+id/textItemAmount"
+                android:id="@+id/textStoreItemCost"
                 android:layout_weight="2"
                 android:gravity="right"
                 android:fontFamily="@font/baloo_chettan"
@@ -48,7 +49,7 @@
             <Button
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:id="@+id/buttonItemUse"
+                android:id="@+id/buttonItemBuy"
                 android:backgroundTint="@android:color/holo_orange_light"
                 android:fontFamily="@font/baloo_chettan"
                 android:text="Purchase"

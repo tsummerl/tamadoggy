@@ -84,11 +84,14 @@ public class MainGameActivity extends AppCompatActivity implements
         }
         m_db = new Database(this);
         ArrayList<Const.CurrentItems> currentItems = getCurrentItems();
+        ArrayList<Const.Items> storeItems = new ArrayList<>();
+        storeItems.addAll(getItems().values());
         m_itemsMaps = getItems();
         final FragmentManager fragmentManager = getSupportFragmentManager();
         m_fragmentMain = new MainFragment();
         m_fragmentWalk = new WalkFragment();
         m_fragmentInventory = ItemsFragment.newInstance(currentItems);
+        m_fragmentShop = StoreFragment.newInstance(storeItems);
         FragmentTransaction fragmentTransactionHome = fragmentManager.beginTransaction();
         fragmentTransactionHome.replace(R.id.fragmentHolder, m_fragmentMain);
         fragmentTransactionHome.commit();
