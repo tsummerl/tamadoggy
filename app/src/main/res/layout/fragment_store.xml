@@ -16,6 +16,7 @@
             android:text="Store"
             style="@style/AppHeader"/>
         <TextView
+            android:id="@+id/textStoreCash"
             android:paddingRight="20dp"
             android:paddingBottom="10dp"
             android:layout_width="match_parent"

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -24,23 +25,27 @@ import java.util.ArrayList;
 public class StoreFragment extends Fragment {
 
     private static final String ITEMS_KEY = "ITEMS_KEY";
+    private static final String CASH = "CASH";
 
     private View v;
     private LinearLayout layout;
     private RecyclerView.LayoutManager m_layoutManager;
     private ArrayList<Const.Items> m_storeItems;
+    private TextView m_cashText;
     private RecyclerView m_recycler;
     private StoreAdapter m_adapter;
     private OnFragmentInteractionListener mListener;
+    private int m_cash;
 
     public StoreFragment() {
         // Required empty public constructor
     }
 
-    public static StoreFragment newInstance(ArrayList<Const.Items> items) {
+    public static StoreFragment newInstance(ArrayList<Const.Items> items, int cash) {
         StoreFragment fragment = new StoreFragment();
         Bundle args = new Bundle();
         args.putSerializable(ITEMS_KEY, items);
+        args.putInt(CASH, cash);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,10 +63,12 @@ public class StoreFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_store, container, false);
         m_storeItems = (ArrayList<Const.Items>) getArguments().getSerializable(ITEMS_KEY);
+        m_cashText = v.findViewById(R.id.textStoreCash);
         layout = v.findViewById(R.id.linearHolderStore);
         m_recycler = v.findViewById(R.id.recyclerStoreItems);
         m_adapter = new StoreAdapter(m_storeItems);
         m_recycler.setAdapter(m_adapter);
+        updateUI();
         return v;
     }
 
@@ -88,7 +95,16 @@ public class StoreFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+    public void updateCash(int cash)
+    {
+        m_cash = cash;
+        //updateUI();
+    }
 
+    private void updateUI()
+    {
+        m_cashText.setText("Cash: $"+m_cash);
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

@@ -88,7 +88,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.MyViewHolder
                         notifyItemChanged(getAdapterPosition());
                         val = item.amount;
                     }
-                    ((MainGameActivity)m_context).useItem(itemID, val);
+                    ((MainGameActivity)m_context).buyItem(itemID, val);
                 }
                 catch (ArrayIndexOutOfBoundsException e)
                 {

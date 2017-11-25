@@ -64,6 +64,7 @@ public class MainGameActivity extends AppCompatActivity implements
             m_valHygiene = m_valHygiene -1;
             m_lastDate = new Date();
             ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger, m_cash);
+            ((StoreFragment) m_fragmentShop).updateCash(m_cash);
 //            handleStat.postDelayed(this, TimeUnit.MINUTES.toMillis(1));
             handleStat.postDelayed(this, TimeUnit.HOURS.toMillis(1));
         }
@@ -92,7 +93,7 @@ public class MainGameActivity extends AppCompatActivity implements
         m_fragmentMain = new MainFragment();
         m_fragmentWalk = new WalkFragment();
         m_fragmentInventory = ItemsFragment.newInstance(currentItems);
-        m_fragmentShop = StoreFragment.newInstance(storeItems);
+        m_fragmentShop = StoreFragment.newInstance(storeItems, m_cash);
         FragmentTransaction fragmentTransactionHome = fragmentManager.beginTransaction();
         fragmentTransactionHome.replace(R.id.fragmentHolder, m_fragmentMain);
         fragmentTransactionHome.commit();
@@ -220,6 +221,7 @@ public class MainGameActivity extends AppCompatActivity implements
         m_nextUpdate = calculateStatValue();
 
         ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger, m_cash);
+        ((StoreFragment) m_fragmentShop).updateCash(m_cash);
         handleStat = new Handler();
         //handleStat.postDelayed(runnable, TimeUnit.MINUTES.toMillis(1));
         handleStat.postDelayed(runnable, TimeUnit.MINUTES.toMillis(m_nextUpdate));
@@ -281,6 +283,11 @@ public class MainGameActivity extends AppCompatActivity implements
         ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger, m_cash);
         m_db.saveItems(id, amount);
 
+    }
+
+    public void buyItem(int id, int amount)
+    {
+        ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(150);
     }
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
