@@ -73,22 +73,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.MyViewHolder
             {
                 try{
                     Const.Items item = m_storeItems.get(getAdapterPosition());
-                    int val = item.amount;
-                    int itemID = item.id;
-                    if(val < 2)
-                    {
-                        m_storeItems.remove(getAdapterPosition());
-                        notifyItemRemoved(getAdapterPosition());
-                        notifyItemRangeChanged(getAdapterPosition(), m_size);
-                        m_size --;
-                        val = 0;
-                    }
-                    else{
-                        item.amount = item.amount - 1;
-                        notifyItemChanged(getAdapterPosition());
-                        val = item.amount;
-                    }
-                    ((MainGameActivity)m_context).buyItem(itemID, val);
+                    ((MainGameActivity)m_context).buyItem(item.id, item.cost);
                 }
                 catch (ArrayIndexOutOfBoundsException e)
                 {

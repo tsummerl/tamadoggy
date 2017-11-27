@@ -53,7 +53,8 @@ public final class Const {
     public enum databaseView {
         CURRENT_ITEMS,
         SHOP_ITEMS,
-        ALL_ITEMS
+        ALL_ITEMS,
+        SPECIFIC_CURRENT_ITEM
     }
 
     public static final class CurrentItems{

@@ -98,12 +98,15 @@ public class StoreFragment extends Fragment {
     public void updateCash(int cash)
     {
         m_cash = cash;
-        //updateUI();
+        updateUI();
     }
 
     private void updateUI()
     {
-        m_cashText.setText("Cash: $"+m_cash);
+        if(m_cashText != null)
+        {
+            m_cashText.setText("Cash: $"+m_cash);
+        }
     }
     /**
      * This interface must be implemented by activities that contain this

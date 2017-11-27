@@ -49,6 +49,19 @@ public class Database {
         }
         return cursor;
     }
+    public Cursor getSpecificCurrentItem(Const.databaseView view, int itemID)
+    {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor cursor = null;
+        switch (view)
+        {
+            case SPECIFIC_CURRENT_ITEM:
+                cursor = db.rawQuery("SELECT * FROM " + Const.CURRENT_ITEMS_TABLE_NAME + " as currentItems, " + Const.ITEM_TABLE_NAME
+                        +" as items WHERE items._id = currentItems.ItemID AND items._id = " + itemID , null);
+                break;
+        }
+        return cursor;
+    }
     public void deleteDatabase()
     {
         try{

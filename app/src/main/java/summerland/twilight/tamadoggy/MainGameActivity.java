@@ -23,6 +23,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -87,8 +88,8 @@ public class MainGameActivity extends AppCompatActivity implements
         m_db = new Database(this);
         ArrayList<Const.CurrentItems> currentItems = getCurrentItems();
         ArrayList<Const.Items> storeItems = new ArrayList<>();
-        storeItems.addAll(getItems().values());
         m_itemsMaps = getItems();
+        storeItems.addAll(m_itemsMaps.values());
         final FragmentManager fragmentManager = getSupportFragmentManager();
         m_fragmentMain = new MainFragment();
         m_fragmentWalk = new WalkFragment();
@@ -173,6 +174,34 @@ public class MainGameActivity extends AppCompatActivity implements
         }
         return currentItems;
     }
+    private Const.CurrentItems getCurrentItem(int id)
+    {
+        Cursor cursor = m_db.getSpecificCurrentItem(Const.databaseView.SPECIFIC_CURRENT_ITEM, id);
+        Const.CurrentItems item = null;
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast())
+        {
+            String name = cursor.getString(cursor.getColumnIndex(Const.ITEM_NAME));
+            int itemId, itemFun, itemFitness, itemHygiene, itemAmount, itemHunger;
+            itemId = cursor.getInt(cursor.getColumnIndex(Const.CURRENT_ITEMS_ID));
+            itemAmount = cursor.getInt(cursor.getColumnIndex(Const.CURRENT_ITEMS_AMOUNT));
+            itemFun = cursor.getInt(cursor.getColumnIndex(Const.ITEM_FUN));
+            itemFitness = cursor.getInt(cursor.getColumnIndex(Const.ITEM_FITNESS));
+            itemHunger = cursor.getInt(cursor.getColumnIndex(Const.ITEM_HUNGER));
+            itemHygiene = cursor.getInt(cursor.getColumnIndex(Const.ITEM_HYGIENE));
+            cursor.moveToNext();
+            Const.CurrentItems curItem = new Const.CurrentItems();
+            curItem.hunger = itemHunger;
+            curItem.fun = itemFun;
+            curItem.fitness = itemFitness;
+            curItem.hygiene = itemHygiene;
+            curItem.amount = itemAmount;
+            curItem.id = itemId;
+            curItem.itemName = name;
+            item = curItem;
+        }
+        return item;
+    }
     private HashMap<Integer, Const.Items> getItems()
     {
         Cursor cursor = m_db.getData(Const.databaseView.ALL_ITEMS);
@@ -235,6 +264,7 @@ public class MainGameActivity extends AppCompatActivity implements
         editor.putInt(Const.SHARED_HYGIENE, m_valHygiene);
         editor.putInt(Const.SHARED_FITNESS, m_valFitness);
         editor.putInt(Const.SHARED_HUNGER, m_valHunger);
+        editor.putInt(Const.SHARED_CASH, m_cash);
         editor.commit();
     }
     private Location getLastKnownLocation() {
@@ -285,9 +315,29 @@ public class MainGameActivity extends AppCompatActivity implements
 
     }
 
-    public void buyItem(int id, int amount)
+    public void buyItem(int id, int cost)
     {
         ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(150);
+        int currentCash = m_cash - cost;
+        if(currentCash < 0)
+        {
+            Toast.makeText(this,"Not Enough money to purchase the item!", Toast.LENGTH_LONG).show();
+        }
+        else{
+            m_cash = currentCash;
+            ((StoreFragment) m_fragmentShop).updateCash(m_cash);
+            Const.CurrentItems currentItem = getCurrentItem(id);
+            //Const.Items item = m_itemsMaps.get(id);
+            int currentAmount = 1;
+            if(currentItem != null)
+            {
+                currentAmount = currentItem.amount + currentAmount;
+                currentItem.amount = currentAmount;
+            }
+            m_db.saveItems(id, currentAmount);
+            m_fragmentInventory = ItemsFragment.newInstance(getCurrentItems());
+        }
+
     }
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,

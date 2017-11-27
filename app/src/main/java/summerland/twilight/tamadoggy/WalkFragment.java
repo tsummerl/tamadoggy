@@ -9,6 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+// API KEY: AIzaSyAaaJjwajzpGLJh7Ngm6RUm5gRz7y9bUVQ
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,7 +26,7 @@ import android.widget.TextView;
  * Use the {@link WalkFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WalkFragment extends Fragment {
+public class WalkFragment extends Fragment implements OnMapReadyCallback{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_LAT = "LAT";
@@ -27,7 +35,7 @@ public class WalkFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private Double mGPSLatitude;
     private Double mGPSLong;
-
+    private GoogleMap mMap;
     private TextView textGPS;
 
     private OnFragmentInteractionListener mListener;
@@ -45,7 +53,8 @@ public class WalkFragment extends Fragment {
      * @return A new instance of fragment WalkFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WalkFragment newInstance(Long mGPSLatitude, Long mGPSLong) {
+    public static WalkFragment newInstance(Long mGPSLatitude, Long mGPSLong)
+    {
         WalkFragment fragment = new WalkFragment();
         Bundle args = new Bundle();
         args.putDouble(ARG_LAT, mGPSLatitude);
@@ -72,6 +81,9 @@ public class WalkFragment extends Fragment {
         View v =inflater.inflate(R.layout.fragment_walk, container, false);
         textGPS = v.findViewById(R.id.textGPSlocation);
         textGPS.setText("GPS LOCATION: " + mGPSLatitude + ", " + mGPSLong);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
         return v;
     }
 
@@ -81,6 +93,7 @@ public class WalkFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -91,6 +104,14 @@ public class WalkFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     /**
