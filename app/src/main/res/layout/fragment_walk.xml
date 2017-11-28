@@ -6,17 +6,40 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="50dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Walk"
             style="@style/AppHeader"/>
-    <TextView
-        android:id="@+id/textGPSlocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="GPS location" />
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="2">
+                <TextView
+                    android:id="@+id/textEstTime"
+                    android:layout_weight="2"
+                    android:fontFamily="@font/baloo_chettan"
+                    android:gravity="left"
+                    android:text="Estimate Time:" />
+                <Button
+                    android:id="@+id/buttonWalk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:backgroundTint="@android:color/holo_orange_light"
+                    android:fontFamily="@font/baloo_chettan"
+                    android:text="Walk"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+            </TableRow>
+        </TableLayout>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -25,8 +48,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="summerland.twilight.tamadoggy.WalkFragment"
-        android:paddingBottom="50dp"/>
+        tools:context="summerland.twilight.tamadoggy.WalkFragment" />
 
     </LinearLayout>
 

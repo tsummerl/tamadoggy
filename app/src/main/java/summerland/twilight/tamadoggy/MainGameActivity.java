@@ -59,10 +59,10 @@ public class MainGameActivity extends AppCompatActivity implements
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            m_valHunger = m_valHunger -2;
-            m_valFun = m_valFun - 3;
-            m_valFitness = m_valFitness -2;
-            m_valHygiene = m_valHygiene -1;
+            m_valHunger = Math.max(0, m_valHunger -2);
+            m_valFun = Math.max(0,m_valFun - 3);
+            m_valFitness = Math.max(0,m_valFitness -2);
+            m_valHygiene = Math.max(0,m_valHygiene -1);
             m_lastDate = new Date();
             ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger, m_cash);
             ((StoreFragment) m_fragmentShop).updateCash(m_cash);
@@ -294,10 +294,10 @@ public class MainGameActivity extends AppCompatActivity implements
         long timeDiff = currDate.getTime() - m_lastDate.getTime();
         int intTimeDiff = (int) TimeUnit.MILLISECONDS.toMinutes(timeDiff);
         if (intTimeDiff >= 60) {
-            m_valHunger = m_valHunger - (2 * (intTimeDiff / 60));
-            m_valFun = m_valFun - (3 * (intTimeDiff / 60));
-            m_valFitness = m_valFitness - (2 * (intTimeDiff / 60));
-            m_valHygiene = m_valHygiene - (1 * (intTimeDiff / 60));
+            m_valHunger = Math.max(0, m_valHunger - (2 * (intTimeDiff / 60)));
+            m_valFun = Math.max(0,m_valFun - (3 * (intTimeDiff / 60)));
+            m_valFitness = Math.max(0,m_valFitness - (2 * (intTimeDiff / 60)));
+            m_valHygiene = Math.max(0,m_valHygiene - (1 * (intTimeDiff / 60)));
 
             m_lastDate = new Date(m_lastDate.getTime() + TimeUnit.HOURS.toMillis(intTimeDiff / 60));
         }
@@ -306,10 +306,10 @@ public class MainGameActivity extends AppCompatActivity implements
     public void useItem(int id, int amount){
         ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(150);
         Const.Items item = m_itemsMaps.get(id);
-        m_valHunger = m_valHunger + item.hunger;
-        m_valFitness = m_valFitness + item.fitness;
-        m_valFun = m_valFun + item.fun;
-        m_valHygiene = m_valHygiene + item.hygiene;
+        m_valHunger = Math.min(100,m_valHunger + item.hunger);
+        m_valFitness = Math.min(100,m_valFitness + item.fitness);
+        m_valFun = Math.min(100,m_valFun + item.fun);
+        m_valHygiene = Math.min(100,m_valHygiene + item.hygiene);
         ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger, m_cash);
         m_db.saveItems(id, amount);
 
@@ -338,6 +338,13 @@ public class MainGameActivity extends AppCompatActivity implements
             m_fragmentInventory = ItemsFragment.newInstance(getCurrentItems());
         }
 
+    }
+    public void walkDog(int seconds)
+    {
+        int val = seconds/60;
+        m_valFitness = Math.min(100,m_valFitness + val);
+        m_valFun = Math.min(100,m_valFun + val/2);
+        ((MainFragment) m_fragmentMain).setProgress(m_valFitness, m_valFun, m_valHygiene, m_valHunger, m_cash);
     }
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
